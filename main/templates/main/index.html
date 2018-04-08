@@ -1,5 +1,25 @@
 {% extends 'main/main.html' %}
 
 {% block content %}
-    INDEX TEXT!!!
+    {% if data %}
+        {% for data in data %}
+        <div class='data'>
+            <div class='id'>
+                timestamp: {{data.id}}
+            </div>
+            <div class='timestamp'>
+                timestamp: {{data.timestamp}}
+            </div>
+            <div class='ram'>
+                ram: {{data.ram}}
+            </div>
+            <div class='cpu'>
+                cpu: {{data.cpu}}
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+    {% else %}
+        <h4>There is no data.</h4>
+    {% endif %}
 {% endblock content %}
