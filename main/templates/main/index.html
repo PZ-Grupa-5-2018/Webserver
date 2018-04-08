@@ -2,23 +2,10 @@
 
 {% block content %}
     {% if data %}
-        {% for data in data %}
-        <div class='data'>
-            <div class='id'>
-                timestamp: {{data.id}}
-            </div>
-            <div class='timestamp'>
-                timestamp: {{data.timestamp}}
-            </div>
-            <div class='ram'>
-                ram: {{data.ram}}
-            </div>
-            <div class='cpu'>
-                cpu: {{data.cpu}}
-            </div>
-        </div>
-        <br>
-        {% endfor %}
+        <h1>url: {{url}}</h1> <br><br>
+        value: {{data.value}}
+        id: {{data.id}}
+        timestamp: {{data.timestamp}}
     {% else %}
         <h4>There is no data.</h4>
     {% endif %}
