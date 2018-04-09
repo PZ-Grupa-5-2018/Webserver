@@ -14,6 +14,6 @@ install:
 script:
   - python manage.py test
   - coverage run --source='.' manage.py test
-  - python manage.py makemigrations index
+  - python manage.py makemigrations main
   - python manage.py migrate
 after_success: coveralls
