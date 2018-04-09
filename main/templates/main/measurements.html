@@ -1,0 +1,20 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    {% if measurements %}
+        <ul>
+        {% for measurement in measurements %}
+        <li>
+            <div class='measurement'>
+                Id:{{measurement.id}} ::
+                Timestamp:{{measurement.timestamp}} ::
+                Value:{{measurement.value}} ::
+                <a href="{{measurement.id}}/">Details</a>
+            </div>
+        </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <h4>There is no measurements.</h4>
+    {% endif %}
+{% endblock content %}

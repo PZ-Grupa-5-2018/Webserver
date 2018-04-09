@@ -1,0 +1,12 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    {% if data %}
+        id: {{data.id}}
+        ip: {{data.ip}}
+        <a href="metrics/">metrics</a>
+
+    {% else %}
+        <h4>There is no data.</h4>
+    {% endif %}
+{% endblock content %}

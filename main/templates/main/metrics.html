@@ -1,0 +1,20 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    {% if metrics %}
+        <ul>
+        {% for metric in metrics %}
+        <li>
+            <div class='metric'>
+                Metric id:{{metric.id}} ::
+                Metric type:{{metric.type}} ::
+                Metric period seconds:{{metric.period_seconds}} ::
+                <a href="{{metric.id}}/">Details</a>
+            </div>
+        </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <h4>There is no metrics.</h4>
+    {% endif %}
+{% endblock content %}

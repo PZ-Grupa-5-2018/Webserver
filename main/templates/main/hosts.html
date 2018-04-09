@@ -1,0 +1,19 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    {% if hosts %}
+        <ul>
+        {% for host in hosts %}
+        <li>
+            <div class='host'>
+                Host id:{{host.id}} ::
+                Host ip:{{host.ip}} ::
+                <a href="{{host.id}}/">Details</a>
+            </div>
+        </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <h4>There is no monitors.</h4>
+    {% endif %}
+{% endblock content %}

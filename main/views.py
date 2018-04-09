@@ -1,22 +1,95 @@
 from django.shortcuts import render
-from django.shortcuts import render_to_response
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.http import HttpResponse
-from rest_framework import request
 import requests
+from .models import Monitor
 
 
 
 def index(request):
-    url = "http://127.0.0.1:8000/hosts/0/metrics/0/measurements/0/"
+    menu_list = [{'name': 'monitor list', 'url': 'http://127.0.0.1:8000/monitors'}, {'name': 'login', 'url': 'http://127.0.0.1:8000/login'}]
+    context = {
+        'menu_list': menu_list,
+    }
+    return render(request, 'main/index.html', context)
+
+
+def monitors(request):
+    monitors = Monitor.objects.all()
+    context = {
+        'monitors': monitors,
+    }
+    return render(request, 'main/monitors.html', context)
+
+
+def hosts(request, monitor_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "/hosts/"
     response = requests.get(url)
     data = response.json()
     context = {
-        'url': url,
+        'hosts': data,
+    }
+    return render(request, 'main/hosts.html', context)
+
+
+def hosts_detail(request, monitor_id, host_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "/hosts/" + str(host_id) + "/"
+    response = requests.get(url)
+    data = response.json()
+    context = {
         'data': data,
     }
-    return render(request, 'main/index.html', context)
+    return render(request, 'main/host_detail.html', context)
+
+
+def metrics(request, monitor_id, host_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "/hosts/" + str(host_id) + "/metrics/"
+    response = requests.get(url)
+    data = response.json()
+    context = {
+        'metrics': data,
+    }
+    return render(request, 'main/metrics.html', context)
+
+
+def metrics_detail(request, monitor_id, host_id, metric_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "/hosts/" + str(host_id) + "/metrics/" + str(metric_id)
+    response = requests.get(url)
+    data = response.json()
+    context = {
+        'data': data,
+    }
+    return render(request, 'main/metrics_detail.html', context)
+
+
+def measurements(request, monitor_id, host_id, metric_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "/hosts/" + str(host_id) + "/metrics/" + str(metric_id) + "/measurements/"
+    response = requests.get(url)
+    data = response.json()
+    context = {
+        'measurements': data,
+    }
+    return render(request, 'main/measurements.html', context)
+
+
+def measurements_detail(request, monitor_id, host_id, metric_id, measurement_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "/hosts/" + str(host_id) + "/metrics/" + str(metric_id) + "/measurements/" + str(measurement_id)
+    response = requests.get(url)
+    data = response.json()
+    context = {
+        'data': data,
+    }
+    return render(request, 'main/measurements_detail.html', context)
+
+def login(request):
+    context = {}
+    return render(request, 'main/login.html', context)
 
 
 ###################################

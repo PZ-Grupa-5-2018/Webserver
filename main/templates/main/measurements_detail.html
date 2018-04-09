@@ -1,0 +1,11 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    {% if data %}
+        Id:{{data.id}} ::
+        Timestamp:{{data.timestamp}} ::
+        Value:{{data.value}}
+    {% else %}
+        <h4>There is no data.</h4>
+    {% endif %}
+{% endblock content %}

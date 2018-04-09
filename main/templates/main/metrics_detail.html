@@ -1,0 +1,13 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    {% if data %}
+        Metric id:{{data.id}} ::
+        Metric type:{{data.type}} ::
+        Metric period seconds:{{data.period_seconds}} ::
+        <a href="measurements/">measurements</a>
+
+    {% else %}
+        <h4>There is no data.</h4>
+    {% endif %}
+{% endblock content %}

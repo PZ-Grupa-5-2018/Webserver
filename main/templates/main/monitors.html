@@ -1,0 +1,19 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    {% if monitors %}
+        <ul>
+        {% for monitor in monitors %}
+        <li>
+            <div class='monitor'>
+                Monitor id:{{monitor.id}} ::
+                Monitor url:{{monitor.url}} ::
+                <a href="{{monitor.id}}/hosts/">hosts</a>
+            </div>
+        </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <h4>There is no monitors.</h4>
+    {% endif %}
+{% endblock content %}
