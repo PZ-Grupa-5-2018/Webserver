@@ -7,7 +7,7 @@ from .models import Monitor
 
 
 def index(request):
-    menu_list = [{'name': 'monitor list', 'url': 'http://127.0.0.1:8000/monitors'}, {'name': 'login', 'url': 'http://127.0.0.1:8000/login'}]
+    menu_list = [{'name': 'monitor list', 'url': '/monitors'}, {'name': 'login', 'url': '/login'}]
     context = {
         'menu_list': menu_list,
     }
