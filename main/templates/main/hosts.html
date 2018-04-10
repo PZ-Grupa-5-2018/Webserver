@@ -2,18 +2,30 @@
 
 {% block content %}
     {% if hosts %}
-        <ul>
-        {% for host in hosts %}
-        <li>
-            <div class='host'>
-                Host id:{{host.id}} ::
-                Host ip:{{host.ip}} ::
-                <a href="{{host.id}}/">Details</a>
-            </div>
-        </li>
-        {% endfor %}
-        </ul>
+        <div id="hosts_table">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">IP</th>
+                  <th scope="col">Details</th>
+                </tr>
+              </thead>
+                <tbody>
+
+                {% for host in hosts %}
+                <tr>
+                  <th scope="row">{{host.id}}</th>
+                  <td>{{host.ip}}</td>
+                  <td> <a href="{{host.id}}/">Show</a></td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <h4>There is no monitors.</h4>
     {% endif %}
-{% endblock content %}
+{% endblock %}
+

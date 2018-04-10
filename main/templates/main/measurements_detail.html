@@ -2,10 +2,26 @@
 
 {% block content %}
     {% if data %}
-        Id:{{data.id}} ::
-        Timestamp:{{data.timestamp}} ::
-        Value:{{data.value}}
+        <div id="measurements_detail_table">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                      <th scope="row">ID</th>
+                      <td>{{data.id}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Timestamp</th>
+                      <td>{{data.timestamp}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Value</th>
+                      <td>{{data.value}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <h4>There is no data.</h4>
     {% endif %}
-{% endblock content %}
+{% endblock %}
+

@@ -2,19 +2,32 @@
 
 {% block content %}
     {% if metrics %}
-        <ul>
-        {% for metric in metrics %}
-        <li>
-            <div class='metric'>
-                Metric id:{{metric.id}} ::
-                Metric type:{{metric.type}} ::
-                Metric period seconds:{{metric.period_seconds}} ::
-                <a href="{{metric.id}}/">Details</a>
-            </div>
-        </li>
-        {% endfor %}
-        </ul>
+        <div id="metrics_table">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Time period (seconds)</th>
+                  <th scope="col">Details</th>
+                </tr>
+              </thead>
+                <tbody>
+
+                {% for metric in metrics %}
+                <tr>
+                  <th scope="row">{{metric.id}}</th>
+                  <td>{{metric.type}}</td>
+                  <td>{{metric.period_seconds}}</td>
+                  <td> <a href="{{metric.id}}/">Show</a></td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <h4>There is no metrics.</h4>
     {% endif %}
-{% endblock content %}
+{% endblock %}
+

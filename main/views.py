@@ -87,9 +87,15 @@ def measurements_detail(request, monitor_id, host_id, metric_id, measurement_id)
     }
     return render(request, 'main/measurements_detail.html', context)
 
+
 def login(request):
     context = {}
     return render(request, 'main/login.html', context)
+
+
+def register(request):
+    context = {}
+    return render(request, 'main/register.html', context)
 
 
 ###################################
