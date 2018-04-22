@@ -40,6 +40,6 @@
     padding-top:50px;
 }
 
-#chart svg {
+.chart {
   height: 400px;
 }
