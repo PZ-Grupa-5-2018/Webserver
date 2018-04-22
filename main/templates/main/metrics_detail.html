@@ -2,12 +2,28 @@
 
 {% block content %}
     {% if data %}
-        Metric id:{{data.id}} ::
-        Metric type:{{data.type}} ::
-        Metric period seconds:{{data.period_seconds}} ::
-        <a href="measurements/">measurements</a>
-
+        <div id="metrics_detail_table">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                      <th scope="row">ID</th>
+                      <td>{{data.id}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Type</th>
+                      <td>{{data.type}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Time period (seconds)</th>
+                      <td>{{data.period_seconds}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="measurements/">SHOW MEASUREMENTS</a>
+        </div>
     {% else %}
         <h4>There is no data.</h4>
     {% endif %}
-{% endblock content %}
+{% endblock %}
+
+

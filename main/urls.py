@@ -7,6 +7,7 @@ from django.conf.urls import url
 urlpatterns = [
     path('', views.index, name='index'),
     url(r'^login/$', views.login),
+    url(r'^register/$', views.register),
     url(r'^monitors/$', views.monitors),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/$', views.hosts),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/(?P<host_id>[0-9]+)/$', views.hosts_detail),

@@ -4,12 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="{% static '/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static '/css/superhero_template/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static '/css/style.css' %}" rel="stylesheet" type="text/css" />
     <script src="{% static '/js/js.js' %}"></script>
 </head>
 <body>
-    {% block content %}{% endblock content %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">Webserver</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" style="">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/monitors/">Monitors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/login/">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/register/">Register</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+    {% block content %}{% endblock %}
 
 </body>
 </html>

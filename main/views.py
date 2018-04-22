@@ -7,7 +7,7 @@ from .models import Monitor
 
 
 def index(request):
-    menu_list = [{'name': 'monitor list', 'url': 'http://127.0.0.1:8000/monitors'}, {'name': 'login', 'url': 'http://127.0.0.1:8000/login'}]
+    menu_list = [{'name': 'monitor list', 'url': '/monitors'}, {'name': 'login', 'url': '/login'}]
     context = {
         'menu_list': menu_list,
     }
@@ -87,9 +87,15 @@ def measurements_detail(request, monitor_id, host_id, metric_id, measurement_id)
     }
     return render(request, 'main/measurements_detail.html', context)
 
+
 def login(request):
     context = {}
     return render(request, 'main/login.html', context)
+
+
+def register(request):
+    context = {}
+    return render(request, 'main/register.html', context)
 
 
 ###################################
