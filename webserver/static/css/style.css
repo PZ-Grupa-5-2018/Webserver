@@ -1,43 +1,12 @@
-#monitors_table{
-    width:800px;
+#box{
+    width:70%;
     margin: 0 auto;
     padding-top:50px;
 }
 
-#hosts_table{
-    width:800px;
-    margin: 0 auto;
-    padding-top:50px;
-}
 
-#hosts_detail_table{
-    width:800px;
-    margin: 0 auto;
-    padding-top:50px;
-}
-
-#metrics_table{
-    width:800px;
-    margin: 0 auto;
-    padding-top:50px;
-}
-
-#metrics_detail_table{
-    width:800px;
-    margin: 0 auto;
-    padding-top:50px;
-}
-
-#measurements_table{
-    width:800px;
-    margin: 0 auto;
-    padding-top:50px;
-}
-
-#measurements_detail_table{
-    width:800px;
-    margin: 0 auto;
-    padding-top:50px;
+.jumbotron .display-3{
+    text-align: center;
 }
 
 .chart {
