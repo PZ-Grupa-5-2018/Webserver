@@ -22,6 +22,15 @@ def monitors(request):
     return render(request, 'main/monitors.html', context)
 
 
+def monitors_detail(request, monitor_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    context = {
+        'id': monitor_id,
+        'url': monitor_url,
+    }
+    return render(request, 'main/monitors_detail.html', context)
+
+
 def hosts(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
     url = str(monitor_url) + "/hosts/"

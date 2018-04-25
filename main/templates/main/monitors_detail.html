@@ -1,0 +1,40 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    <div class="jumbotron">
+      <h1 class="display-3">Monitor: {{url}}</h1>
+
+        <br>
+        <div id="monitors_detail_table">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                      <th scope="row">ID</th>
+                      <td>{{id}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">URL</th>
+                      <td>{{url}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+             <center><a class="btn btn-primary btn-lg" href="hosts/" role="button">Connect</a></center>
+        </div>
+
+        <br>
+        <div class="container">
+            <button type="button" class="btn-primary" id="btnLoadChart"> Show chart</button>
+             <div class="chart" id="chartBar">
+              <svg></svg>
+            </div>
+            <div class="chart" id="chartCum">
+              <svg></svg>
+            </div>
+             <div class="chart" id="chartPie">
+              <svg></svg>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,31 +1,35 @@
 {% extends 'main/main.html' %}
 
 {% block content %}
-    {% if hosts %}
-        <div id="hosts_table">
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">IP</th>
-                  <th scope="col">Details</th>
-                </tr>
-              </thead>
-                <tbody>
+    <div class="jumbotron">
+      <h1 class="display-3">Host list</h1>
 
-                {% for host in hosts %}
-                <tr>
-                  <th scope="row">{{host.id}}</th>
-                  <td>{{host.ip}}</td>
-                  <td> <a href="{{host.id}}/">Show</a></td>
-                </tr>
-                {% endfor %}
+        {% if hosts %}
+            <div id="hosts_table">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">IP</th>
+                      <th scope="col">Details</th>
+                    </tr>
+                  </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <h4>There is no monitors.</h4>
-    {% endif %}
+                    {% for host in hosts %}
+                    <tr>
+                      <th scope="row">{{host.id}}</th>
+                      <td>{{host.ip}}</td>
+                      <td> <a href="{{host.id}}/">Show</a></td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <h4>There is no monitors.</h4>
+        {% endif %}
+    </div>
 {% endblock %}
 
