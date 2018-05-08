@@ -5,6 +5,20 @@ import requests
 from .models import Monitor
 
 
+def getMonitorDataFromUrl(url):
+    monitors = Monitor.objects.all()
+    monitors_data = []
+    for monitor in monitors:
+        url = str(monitor.url) + "/hosts/"
+        response = requests.get(url)
+        data = response.json()
+        context = {
+            'monitor_id': monitor.id,
+            'monitor_url': monitor.url,
+            'monitor_hosts': data,
+        }
+        monitors_data.append(context)
+    return monitors_data
 
 def index(request):
     menu_list = [{'name': 'monitor list', 'url': '/monitors'}, {'name': 'login', 'url': '/login'}]
@@ -16,6 +30,7 @@ def index(request):
 
 def monitors(request):
     monitors = Monitor.objects.all()
+
     context = {
         'monitors': monitors,
     }
@@ -24,6 +39,9 @@ def monitors(request):
 
 def monitors_detail(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
+
+    monitor_data = getMonitorDataFromUrl(monitor_url)
+
     url = str(monitor_url) + "/hosts/"
     response = requests.get(url)
     data = response.json()
@@ -31,6 +49,7 @@ def monitors_detail(request, monitor_id):
         'id': monitor_id,
         'url': monitor_url,
         'hosts': data,
+        'monitor_data': monitor_data,
     }
     return render(request, 'main/monitors_detail.html', context)
 
