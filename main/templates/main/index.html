@@ -3,55 +3,24 @@
 {% block content %}
 
     <div class="jumbotron">
-      <h1 class="display-3">Dziesięć ostatnich pomiarów</h1>
+      <h1 class="display-3">Welcome to Grupa5 WebServer!</h1>
 
-        <br>
-
-        <table class="table table-hover" id="table_10_last_measurements">
-              <thead>
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Monitor</th>
-                  <th scope="col">Metric</th>
-                  <th scope="col">Timestamp</th>
-                  <th scope="col">Value</th>
-                  <th scope="col">Details</th>
-                </tr>
-              </thead>
-                <tbody>
-
-                <tr>
-                  <th scope="row">1</th>
-                  <th scope="row">1.1.1.1</th>
-                  <th scope="row">ram</th>
-                  <th scope="row">123</th>
-                  <th scope="row">321</th>
-                  <th scope="row"> <a href="#">Show</a></th>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <th scope="row">1.1.1.1</th>
-                  <th scope="row">ram</th>
-                  <th scope="row">123</th>
-                  <th scope="row">321</th>
-                  <th scope="row"> <a href="#">Show</a></th>
-                </tr>
-                <tr>
-                  <th scope="row">1</th>
-                  <th scope="row">1.1.1.1</th>
-                  <th scope="row">ram</th>
-                  <th scope="row">123</th>
-                  <th scope="row">321</th>
-                  <th scope="row"> <a href="#">Show</a></th>
-                </tr>
-
-                </tbody>
-        </table>
-      <hr class="my-4">
-      <p>Chcesz poznać więcej pomiarów, lub ściągnąć ich pełną listę?</p>
+      <p>Do you want to see the full list of monitors? Click the button below.</p>
       <p class="lead">
-        <a class="btn btn-primary btn-lg" href="/monitors/" role="button">Więcej pomiarów</a>
+        <a class="btn btn-primary btn-lg" href="/monitors/" role="button">Monitor list</a>
       </p>
+
+      <p>If you want to log in, click this button.</p>
+      <p class="lead">
+        <a class="btn btn-primary btn-lg" href="/login/" role="button">Log in</a>
+      </p>
+
+      <p>You don't have an account yet? Click here!</p>
+      <p class="lead">
+        <a class="btn btn-primary btn-lg" href="/register/" role="button">Register</a>
+      </p>
+
+
     </div>
 
 

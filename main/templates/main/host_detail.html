@@ -15,6 +15,22 @@
                               <th scope="row">IP</th>
                               <td>{{host_data.ip}}</td>
                             </tr>
+                            <tr>
+                              <th scope="row">Mac</th>
+                              <td>{{host_data.mac}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Name</th>
+                              <td>{{host_data.name}}</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">CPU</th>
+                              <td>{{host_data.cpu}}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Memory</th>
+                                <td>{{host_data.memory}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -30,20 +46,22 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">ID</th>
-                      <th scope="col">Type</th>
-                      <th scope="col">Time period (seconds)</th>
-                      <th scope="col">Details</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Time period (seconds)</th>
+                        <th scope="col">Metric id</th>
+                        <th scope="col">Details</th>
                     </tr>
                   </thead>
                     <tbody>
 
                     {% for metric in metrics_data %}
                     <tr>
-                      <th scope="row">{{metric.id}}</th>
-                      <td>{{metric.type}}</td>
-                      <td>{{metric.period_seconds}}</td>
-                      <td> <a href="metrics/{{metric.id}}/">Show</a></td>
+                        <th scope="row">{{metric.id}}</th>
+                        <td>{{metric.type}}</td>
+                        <td>{{metric.period_seconds}}</td>
+                        <td>{{metric.metric_id}}</td>
+                        <td> <a href="metrics/{{metric.id}}/">Show</a></td>
                     </tr>
                     {% endfor %}
 

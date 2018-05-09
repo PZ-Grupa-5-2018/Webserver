@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 import requests
 from .models import Monitor
 from .utils import getMonitorDataFromUrl
+from .utils import getLastMeasurements
 from django.core import serializers
 import json
 
@@ -41,10 +42,12 @@ def monitors_detail(request, monitor_id):
     url = str(monitor_url) + "/hosts/"
     response = requests.get(url)
     data = response.json()
+    last_measurements = getLastMeasurements(monitor_id, 20)
     context = {
         'id': monitor_id,
         'url': monitor_url,
         'hosts': data,
+        'last_measurements': last_measurements,
     }
     return render(request, 'main/monitors_detail.html', context)
 

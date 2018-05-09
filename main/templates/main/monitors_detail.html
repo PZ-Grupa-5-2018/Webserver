@@ -35,19 +35,25 @@
                     <tr>
                       <th scope="col">ID</th>
                       <th scope="col">IP</th>
+                      <th scope="col">Mac</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">CPU</th>
+                      <th scope="col">Memory</th>
                       <th scope="col">Details</th>
                     </tr>
                   </thead>
                     <tbody>
-
                     {% for host in hosts %}
                     <tr>
                       <th scope="row">{{host.id}}</th>
                       <td>{{host.ip}}</td>
+                      <td>{{host.mac}}</td>
+                      <td>{{host.name}}</td>
+                      <td>{{host.cpu}}</td>
+                      <td>{{host.memory}}</td>
                       <td> <a href="hosts/{{host.id}}/">Show</a></td>
                     </tr>
                     {% endfor %}
-
                     </tbody>
                 </table>
             </div>
@@ -56,6 +62,31 @@
         {% endif %}
 
     </div>
+     <div class="jumbotron">
+         <h1 class="display-3">Last 20 measurements</h1>
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">IP</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Value</th>
+                      <th scope="col">Timestamp</th>
+                    </tr>
+                  </thead>
+                    <tbody>
+                    {% for measurement in last_measurements %}
+                        <tr>
+                          <th scope="row">{{measurement.id}}</th>
+                          <td>{{measurement.ip}}</td>
+                          <td>{{measurement.type}}</td>
+                          <td>{{measurement.value}}</td>
+                          <td>{{measurement.timestamp}}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+     </div>
         <div class="container">
             <button type="button" class="btn-primary" id="btnLoadChart"> Show chart</button>
              <div class="chart" id="chartBar">

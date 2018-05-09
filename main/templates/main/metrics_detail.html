@@ -16,6 +16,10 @@
                           <td>{{metric_data.type}}</td>
                         </tr>
                         <tr>
+                          <th scope="row">Metric id</th>
+                          <td>{{metric_data.metric_id}}</td>
+                        </tr>
+                        <tr>
                           <th scope="row">Time period (seconds)</th>
                           <td>{{metric_data.period_seconds}}</td>
                         </tr>
@@ -34,18 +38,16 @@
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">ID</th>
-                      <th scope="col">Timestamp</th>
-                      <th scope="col">Value</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Timestamp</th>
                     </tr>
                   </thead>
                     <tbody>
 
                     {% for measurement in measurements_data %}
                         <tr>
-                          <th scope="row">{{measurement.id}}</th>
+                          <th scope="row">{{measurement.value}}</th>
                           <td>{{measurement.timestamp}}</td>
-                          <td>{{measurement.value}}</td>
                         </tr>
                     {% endfor %}
 
