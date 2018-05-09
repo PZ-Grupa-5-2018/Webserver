@@ -18,6 +18,12 @@
                 </tbody>
             </table>
         </div>
+        <center>
+            Whole monitor data:
+            <form action="download_monitor_data">
+                <input type="submit" value="Download" class="btn-primary">
+            </form>
+        </center>
     </div>
 
     <div class="jumbotron">
@@ -49,9 +55,6 @@
             <h4>There is no hosts.</h4>
         {% endif %}
 
-    </div>
-    <div class="jumbotron">
-        {{monitor_data}}
     </div>
         <div class="container">
             <button type="button" class="btn-primary" id="btnLoadChart"> Show chart</button>

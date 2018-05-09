@@ -1,24 +1,23 @@
+from django.http import HttpResponse
 from django.shortcuts import render
+from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import requests
 from .models import Monitor
+from .utils import getMonitorDataFromUrl
+from django.core import serializers
+import json
 
 
-def getMonitorDataFromUrl(url):
-    monitors = Monitor.objects.all()
-    monitors_data = []
-    for monitor in monitors:
-        url = str(monitor.url) + "/hosts/"
-        response = requests.get(url)
-        data = response.json()
-        context = {
-            'monitor_id': monitor.id,
-            'monitor_url': monitor.url,
-            'monitor_hosts': data,
-        }
-        monitors_data.append(context)
-    return monitors_data
+def downloadMonitorDetails(request, monitor_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    monitor_data = getMonitorDataFromUrl(monitor_url)
+    parsed = json.loads(json.dumps(monitor_data))
+    response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
+    response['Content-Disposition'] = 'attachment; filename='+'monitor_'+str(monitor_url)+'_data.json'
+
+    return response
 
 def index(request):
     menu_list = [{'name': 'monitor list', 'url': '/monitors'}, {'name': 'login', 'url': '/login'}]
@@ -39,9 +38,6 @@ def monitors(request):
 
 def monitors_detail(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-
-    monitor_data = getMonitorDataFromUrl(monitor_url)
-
     url = str(monitor_url) + "/hosts/"
     response = requests.get(url)
     data = response.json()
@@ -49,7 +45,6 @@ def monitors_detail(request, monitor_id):
         'id': monitor_id,
         'url': monitor_url,
         'hosts': data,
-        'monitor_data': monitor_data,
     }
     return render(request, 'main/monitors_detail.html', context)
 
