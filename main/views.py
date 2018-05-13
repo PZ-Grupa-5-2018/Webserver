@@ -115,9 +115,9 @@ def search(request):
 
 def search_host(request):
     url = 'https://pz-monitor.herokuapp.com/hosts/?format=json'
-    type = request.GET['search_type'] #'generic' jak wyszukujemy globalnie, 'advanced' jak z urla /search
+    search_type = request.GET['search_type'] #'generic' jak wyszukujemy globalnie, 'advanced' jak z urla /search
 
-    if type == 'generic':
+    if search_type == 'generic':
         name = request.GET['search_generic']
         url = url + '&name=' + name
     else:
