@@ -41,8 +41,9 @@
         <a class="nav-link" href="/search/">Search</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+    <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'search_host' %}">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" name="search_generic">
+      <input hidden="hidden" name="search_type" value="generic">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>

@@ -3,6 +3,7 @@
 {% block content %}
 
 <form method="get" action="{% url 'search_host' %}">
+<input hidden="hidden" name="search_type" value="advanced">
   <fieldset>
     <legend>Search host</legend>
 
