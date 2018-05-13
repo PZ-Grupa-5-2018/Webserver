@@ -92,3 +92,46 @@ def login(request):
 def register(request):
     context = {}
     return render(request, 'main/register.html', context)
+
+
+def search(request):
+    url = 'https://pz-monitor.herokuapp.com/hosts/?format=json'
+    response = requests.get(url)
+    metric_data = response.json()
+
+    memory = set()
+    cpu = set()
+    for i in response.json():
+        memory.add(i['memory'])
+        cpu.add(i['cpu'])
+
+    context = {
+        'hosts': metric_data,
+        'memory': memory,
+        'cpu': cpu,
+    }
+    return render(request, 'main/search.html', context)
+
+
+def search_host(request):
+    url = 'https://pz-monitor.herokuapp.com/hosts/?format=json'
+    type = request.GET['search_type'] #'generic' jak wyszukujemy globalnie, 'advanced' jak z urla /search
+
+    if type == 'generic':
+        name = request.GET['search_generic']
+        url = url + '&name=' + name
+    else:
+        name = request.GET['search_name']
+        url = url + '&name=' + str(name)
+        ip = request.GET['search_ip']
+        url = url + '&ip=' + str(ip)
+
+    # TODO dodac obsluge checkboxow
+
+    response = requests.get(url)
+    metric_data = response.json()
+
+    context = {
+        'data': metric_data
+    }
+    return render(request, 'main/search_host.html', context)

@@ -1,0 +1,41 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    <div class="jumbotron">
+
+        <h1 class="display-3">Hosts</h1>
+    {% if data %}
+            <div id="hosts_table">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">IP</th>
+                      <th scope="col">MAC</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">CPU</th>
+                      <th scope="col">Memory</th>
+                      <th scope="col">Details</th>
+                    </tr>
+                  </thead>
+                    <tbody>
+                        {% for host in data %}
+                    <tr>
+                      <th scope="row">{{host.id}}</th>
+                      <td>{{host.ip}}</td>
+                      <td>{{host.mac}}</td>
+                      <td>{{ host.name }}</td>
+                      <td>{{host.cpu}}</td>
+                      <td>{{host.memory}}</td>
+                      <td> <a href="monitors/1/hosts/{{host.id}}/"> NIE KLIKAC NIE DZIALA :D</a></td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+    {% else %}
+            <h4>There is literally no host with chosen parameters </h4>
+    {% endif %}
+    </div>
+{% endblock %}

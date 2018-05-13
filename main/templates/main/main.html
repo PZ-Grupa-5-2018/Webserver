@@ -12,7 +12,8 @@
     <script src="{% static '/js/d3v3.js' %}"></script>
     <script src="{% static '/js/nv.d3.min.js' %}"></script>
     <script src="{% static '/js/tempFunctions.js' %}"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -36,9 +37,13 @@
       <li class="nav-item">
         <a class="nav-link" href="/register/">Register</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/search/">Search</a>
+      </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+    <form class="form-inline my-2 my-lg-0" method="get" action="{% url 'search_host' %}">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" name="search_generic">
+      <input hidden="hidden" name="search_type" value="generic">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>
