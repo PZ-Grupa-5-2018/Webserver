@@ -114,6 +114,7 @@ def search(request):
 
 
 def search_host(request):
+    monitor = Monitor.objects.get(url='https://pz-monitor.herokuapp.com')
     url = 'https://pz-monitor.herokuapp.com/hosts/?format=json'
     search_type = request.GET['search_type'] #'generic' jak wyszukujemy globalnie, 'advanced' jak z urla /search
 
@@ -132,6 +133,7 @@ def search_host(request):
     metric_data = response.json()
 
     context = {
-        'data': metric_data
+        'data': metric_data,
+        'monitor_info': monitor
     }
     return render(request, 'main/search_host.html', context)
