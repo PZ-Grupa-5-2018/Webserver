@@ -6,7 +6,7 @@ var drawChart =  function () {
         chart.xAxis
             .axisLabel('Time')
             .tickFormat(function(d) {
-                 return d3.time.format('%x %X')(new Date(d))
+                 return d3.time.format('%x %X')(new Date(d*1000))
             });
         ;
 
