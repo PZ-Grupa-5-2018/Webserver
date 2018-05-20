@@ -10,6 +10,7 @@
                   <thead>
                     <tr>
                       <th scope="col">ID</th>
+                      <th scope="col">Monitor URL</th>
                       <th scope="col">IP</th>
                       <th scope="col">MAC</th>
                       <th scope="col">Name</th>
@@ -22,12 +23,13 @@
                         {% for host in data %}
                     <tr>
                       <th scope="row">{{host.id}}</th>
+                      <th scope="row">{{ host.monitor_url }}</th>
                       <td>{{host.ip}}</td>
                       <td>{{host.mac}}</td>
                       <td>{{ host.name }}</td>
                       <td>{{host.cpu}}</td>
                       <td>{{host.memory}}</td>
-                      <td> <a href="/monitors/{{ monitor_info.id }}/hosts/{{host.id}}/"> Detail </a></td>
+                      <td> <a href="/monitors/{{ host.monitor_id }}/hosts/{{host.id}}/"> Detail </a></td>
                     </tr>
                     {% endfor %}
 

@@ -100,26 +100,53 @@ def search(request):
 
 
 def search_host(request):
-    monitor = Monitor.objects.get(url='https://pz-monitor.herokuapp.com')
-    url = 'https://pz-monitor.herokuapp.com/hosts/?format=json'
-    search_type = request.GET['search_type'] #'generic' jak wyszukujemy globalnie, 'advanced' jak z urla /search
+    # 'generic' jak wyszukujemy globalnie, 'advanced' jak z urla /search
+    search_type = request.GET['search_type']
+    monitor = Monitor.objects.all()
 
     if search_type == 'generic':
-        name = request.GET['search_generic']
-        url = url + '&name=' + name
+        all_metric_data = []
+        for i in monitor:
+            url = i.url
+            url = url + '/hosts/?format=json'
+            name = request.GET['search_generic']
+            url = url + '&name=' + name
+
+            response = requests.get(url)
+            metric_data = response.json()
+            for j in metric_data:
+                j['monitor_id'] = i.id
+                j['monitor_url'] = i.url
+
+            all_metric_data.extend(metric_data)
+
+        context = {
+            'data': all_metric_data,
+        }
+        return render(request, 'main/search_host.html', context)
+
     else:
-        name = request.GET['search_name']
-        url = url + '&name=' + str(name)
-        ip = request.GET['search_ip']
-        url = url + '&ip=' + str(ip)
-        mac = request.GET['search_mac']
-        url = url + '&mac=' + str(mac)
+        all_metric_data = []
+        for i in monitor:
+            url = i.url
+            url = url + '/hosts/?format=json'
+            name = request.GET['search_name']
+            url = url + '&name=' + name
+            ip = request.GET['search_ip']
+            url = url + '&ip=' + str(ip)
+            mac = request.GET['search_mac']
+            url = url + '&mac=' + str(mac)
 
-    response = requests.get(url)
-    metric_data = response.json()
+            response = requests.get(url)
+            metric_data = response.json()
+            for j in metric_data:
+                j['monitor_id'] = i.id
+                j['monitor_url'] = i.url
 
-    context = {
-        'data': metric_data,
-        'monitor_info': monitor
-    }
-    return render(request, 'main/search_host.html', context)
+            all_metric_data.extend(metric_data)
+
+        context = {
+            'data': all_metric_data,
+        }
+        return render(request, 'main/search_host.html', context)
+
