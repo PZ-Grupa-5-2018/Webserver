@@ -18,29 +18,10 @@
     </div>
 
 
-    <fieldset class="form-group">
-      <legend>RAM</legend>
-      {% for dane in memory %}
-      <div class="form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="" checked="">
-            {{ dane }}
-        </label>
-      </div>
-      {% endfor %}
-    </fieldset>
-
-    <fieldset class="form-group">
-      <legend>CPU type</legend>
-      {% for dane in cpu %}
-      <div class="form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="" checked="">
-          {{ dane }}
-        </label>
-      </div>
-      {% endfor %}
-    </fieldset>
+    <div class="form-group">
+      <legend>MAC</legend>
+      <input type="text" class="form-control" name="search_mac" placeholder="e.g 01-23-45-67-89-01">
+    </div>
 
         <button type="submit" class="btn btn-primary">SEARCH</button>
     </fieldset>
