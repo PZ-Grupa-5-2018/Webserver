@@ -9,7 +9,8 @@ from .utils import getMonitorDataFromUrl
 from .utils import getLastMeasurements
 from django.core import serializers
 import json
-
+import datetime
+import time
 
 def downloadMonitorDetails(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
@@ -43,6 +44,7 @@ def monitors_detail(request, monitor_id):
     response = requests.get(url)
     data = response.json()
     last_measurements = getLastMeasurements(monitor_id, 20)
+
     context = {
         'id': monitor_id,
         'url': monitor_url,
@@ -61,9 +63,22 @@ def hosts_detail(request, monitor_id, host_id):
     url = url + "metrics/"
     response = requests.get(url)
     metrics_data = response.json()
+
+    data_chart = []
+    for metric in metrics_data:
+        url = str (monitor_url) + "/hosts/" + str (host_id) + "/metrics/" + str (metric["id"]) + "/measurements"
+        response = requests.get (url)
+        measurements_data = response.json ()
+        values = []
+        for single_measurment in measurements_data:
+            values.append ( { 'x': time.mktime (
+                datetime.datetime.strptime (single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()), 'y': single_measurment["value"]})
+        data_chart.append (dict (key=metric["type"], values=values))
+
     context = {
         'host_data': host_data,
         'metrics_data': metrics_data,
+        'chart_data': json.dumps(data_chart),
     }
     return render(request, 'main/host_detail.html', context)
 
