@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 #box{
     width:70%;
     margin: 0 auto;
@@ -11,4 +13,49 @@
 
 .chart {
     height: 400px;
+}
+
+#box_for_monitor_list{
+    display:inline-block;
+    text-align:center;
+}
+
+.box_for_single_monitor{
+    float:left;
+    margin:10px;
+    border-radius: 5px;
+    padding:10px;
+    height:350px;
+    width:400px;
+    background-color: white;
+    list-style-position: inside;
+}
+
+.image_monitor {
+   margin:0 auto;
+   background:url('/static/images/monitor_img1.png');
+   height:200px;
+   width:200px;
+   background-size: contain;
+}​
+
+.why_it_is_not_working_without_this????{
+}
+
+.url_for_single_monitor{
+    width:350px;
+    margin: 0 auto;
+    text-align:center;
+    white-space: pre-wrap;      /* CSS3 */
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
+}
+
+.button_to_connect_monitor{
+    height:50px;
+    width:105px;
+    margin:0 auto;
+    text-align:center;
 }
