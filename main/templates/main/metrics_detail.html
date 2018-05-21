@@ -2,7 +2,8 @@
 
 {% block content %}
     <div class="jumbotron">
-        <h1 class="display-3">Metric info</h1>
+        <h1 class="display-5">Informations about current metric</h1>
+        <br>
         {% if metric_data %}
             <div id="metrics_detail_table">
                 <table class="table table-hover">
@@ -32,7 +33,7 @@
     </div>
 
     <div class="jumbotron">
-        <h1 class="display-3">Measurements</h1>
+        <h1 class="display-5">Measurements</h1>
         {% if measurements_data %}
             <div id="measurements_table">
                 <table class="table table-hover">

@@ -11,6 +11,10 @@
     text-align: center;
 }
 
+.jumbotron .display-5{
+    text-align: center;
+}
+
 .chart {
     height: 400px;
 }
@@ -58,4 +62,34 @@
     width:105px;
     margin:0 auto;
     text-align:center;
+}
+
+#monitors_detail_table{
+    width:auto;
+}
+
+.cards_box{
+width:700px;
+height:300px;
+display:inline-block;
+padding-top:10px;
+padding-left:10px;
+}
+
+.monitor_card{
+float:left;
+margin:10px;
+}
+
+#hosts_detail_table{
+    width:50%;
+    margin:0 auto;
+}
+#metrics_detail_table{
+    width:50%;
+    margin:0 auto;
+}
+#measurements_table{
+    width:50%;
+    margin:0 auto;
 }

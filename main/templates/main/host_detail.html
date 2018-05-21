@@ -2,7 +2,8 @@
 
 {% block content %}
     <div class="jumbotron">
-        <h1 class="display-3">Host info</h1>
+        <h1 class="display-5">Informations about current host</h1>
+        <br>
         {% if host_data %}
                 <div id="hosts_detail_table">
                     <table class="table table-hover">
@@ -40,7 +41,7 @@
     </div>
 
     <div class="jumbotron">
-        <h1 class="display-3">Metrics</h1>
+        <h1 class="display-5">Metrics</h1>
         {% if metrics_data %}
             <div id="metrics_table">
                 <table class="table table-hover">
@@ -78,7 +79,7 @@
     </script>
 
     <div class="jumbotron">
-             <h1 class="display-3">Chart measurement</h1>
+             <h1 class="display-5">Chart measurement</h1>
             <div class="chart" id="chart"><svg></svg></div>
     </div>
 {% endblock %}
