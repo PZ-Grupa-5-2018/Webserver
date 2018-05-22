@@ -128,6 +128,21 @@ def search_host(request):
     search_type = request.GET['search_type']
     monitor = Monitor.objects.all()
 
+    try:
+        cpu = request.GET['CPU']
+    except:
+        cpu = "off"
+
+    try:
+        ram = request.GET['RAM']
+    except:
+        ram = 'off'
+
+    try:
+        hdd = request.GET['HDD']
+    except:
+        hdd = 'off'
+
     if search_type == 'generic':
         all_metric_data = []
         for i in monitor:
@@ -163,11 +178,31 @@ def search_host(request):
 
             response = requests.get(url)
             metric_data = response.json()
-            for j in metric_data:
-                j['monitor_id'] = i.id
-                j['monitor_url'] = i.url
 
-            all_metric_data.extend(metric_data)
+            for j in metric_data:
+                url = i.url + '/hosts/' + str(j.get('id')) + '/metrics/?format=json'
+                host = requests.get(url)
+                host = host.json()
+
+                all_metrics = set()
+                for metryka in host:
+                    all_metrics.add(metryka['type'])
+
+                if cpu == 'on':
+                    if 'CPU' in all_metrics:
+                        j['monitor_id'] = i.id
+                        j['monitor_url'] = i.url
+                        all_metric_data.extend(metric_data)
+                elif ram == 'on':
+                    if 'ram' in all_metrics:
+                        j['monitor_id'] = i.id
+                        j['monitor_url'] = i.url
+                        all_metric_data.extend(metric_data)
+                elif hdd == 'on':
+                    if 'hdd' in all_metrics:
+                        j['monitor_id'] = i.id
+                        j['monitor_url'] = i.url
+                        all_metric_data.extend(metric_data)
 
         context = {
             'data': all_metric_data,
