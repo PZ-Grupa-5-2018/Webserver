@@ -44,7 +44,7 @@
         <div class="card-body">
             <h4 class="card-title">List of all hosts.</h4>
             <p class="card-text">If you want to get some more information about host, please click on 'Show' button in the list.</p>
-            <table class="table table-striped table-bordered">
+            <table id="host_datatable" class="table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -88,6 +88,12 @@
             <h4>There is no measurements.</h4>
         {% endif %}
      </div>
-
+<script>
+$(document).ready(function() {
+    $('#host_datatable').DataTable();
+} );
+</script>
 {% endblock %}
+
+
 

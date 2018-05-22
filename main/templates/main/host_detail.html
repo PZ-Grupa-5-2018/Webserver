@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <h4 class="card-title">Information about current host</h4>
                         <div id="hosts_detail_table">
-                            <table class="table table-striped table-bordered">
+                            <table id="host_detail_datatable" class="table table-striped table-bordered">
                                 <tbody>
                                     <tr>
                                       <th scope="row">ID</th>
@@ -49,7 +49,7 @@
                 <h4 class="card-title">List of all metrics in host.</h4>
                 <p class="card-text">'Show' button allow you to check out some details about metric.</p>
                 <div id="metrics_table">
-                    <table class="table table-striped table-bordered">
+                    <table id="metrics_datatable" class="table table-striped table-bordered">
                       <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -88,6 +88,13 @@
             <div class="chart" id="chart"><svg></svg></div>
         </div>
     </div>
+
+<script>
+$(document).ready(function() {
+    $('#metrics_datatable').DataTable();
+} );
+</script>
 {% endblock %}
+
 
 
