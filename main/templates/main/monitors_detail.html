@@ -1,6 +1,11 @@
 {% extends 'main/main.html' %}
-
+{% load staticfiles %}
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static '/js/getLastMeasurements.js' %}"></script>
+{% endblock %}
 {% block content %}
+
     <center><h1 class="display-3">{{url}}</h1></center>
     <br>
     <center>
