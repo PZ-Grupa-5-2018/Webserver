@@ -1,11 +1,12 @@
+
 $(document).ready(function(){
     $.ajax({
         url: "https://pz-monitor-2.herokuapp.com/hosts/1/",
         success: function( data ) {
-            alert("work");
+            console.log("work");
         },
-        error: function(ts) {
-            alert("dont work");
+        error: function(ts,resp,error) {
+            console.log("not work - response: "+resp+" error: "+error);
         }
     }).then(function(data) {
        $('#test_id').append(data.id);
