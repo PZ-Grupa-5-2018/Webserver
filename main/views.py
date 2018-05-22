@@ -21,6 +21,15 @@ def downloadMonitorDetails(request, monitor_id):
 
     return response
 
+
+def getLastMeasurementsView(request, monitor_id):
+    last_measurements = getLastMeasurements(monitor_id, 20)
+    parsed = json.loads(json.dumps(last_measurements))
+    response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
+
+    return response
+
+
 def index(request):
     menu_list = [{'name': 'monitor list', 'url': '/monitors'}, {'name': 'login', 'url': '/login'}]
     context = {
