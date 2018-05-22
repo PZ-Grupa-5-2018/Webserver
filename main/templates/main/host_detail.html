@@ -1,43 +1,45 @@
 {% extends 'main/main.html' %}
 
 {% block content %}
-    <div class="jumbotron">
-        <h1 class="display-5">Informations about current host</h1>
-        <br>
-        {% if host_data %}
-                <div id="hosts_detail_table">
-                    <table class="table table-hover">
-                        <tbody>
-                            <tr>
-                              <th scope="row">ID</th>
-                              <td>{{host_data.id}}</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">IP</th>
-                              <td>{{host_data.ip}}</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Mac</th>
-                              <td>{{host_data.mac}}</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Name</th>
-                              <td>{{host_data.name}}</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">CPU</th>
-                              <td>{{host_data.cpu}}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Memory</th>
-                                <td>{{host_data.memory}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <div class="card border-dark mb-3">
+        <div class="card-header">Host</div>
+            {% if host_data %}
+                <div class="card-body">
+                    <h4 class="card-title">Information about current host</h4>
+                        <div id="hosts_detail_table">
+                            <table class="table table-striped table-bordered">
+                                <tbody>
+                                    <tr>
+                                      <th scope="row">ID</th>
+                                      <td>{{host_data.id}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">IP</th>
+                                      <td>{{host_data.ip}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Mac</th>
+                                      <td>{{host_data.mac}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Name</th>
+                                      <td>{{host_data.name}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">CPU</th>
+                                      <td>{{host_data.cpu}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Memory</th>
+                                        <td>{{host_data.memory}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                 </div>
-        {% else %}
-            <h4>There is no data.</h4>
-        {% endif %}
+            {% else %}
+                <h4>There is no data.</h4>
+            {% endif %}
     </div>
 
     <div class="card border-dark mb-3">
@@ -82,9 +84,11 @@
         var chart_data_measurments = {{ chart_data | safe }};
     </script>
 
-    <div class="jumbotron">
-             <h1 class="display-5">Chart measurement</h1>
+    <div class="card border-dark mb-3">
+        <div class="card-header">Chart measurement</div>
+        <div class="card-body">
             <div class="chart" id="chart"><svg></svg></div>
+        </div>
     </div>
 
 
