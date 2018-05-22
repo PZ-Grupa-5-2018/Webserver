@@ -173,15 +173,12 @@ def search_host(request):
             for j in metric_data:
                 url = i.url + '/hosts/' + str(j.get('id')) + '/metrics/?format=json'
                 host = requests.get(url)
-                print(url)
                 host = host.json()
-                print(host)
 
                 all_metrics = set()
                 for metryka in host:
                     all_metrics.add(metryka['type'])
 
-                print(all_metrics)
                 if cpu == 'on':
                     if 'CPU' in all_metrics:
                         j['monitor_id'] = i.id
