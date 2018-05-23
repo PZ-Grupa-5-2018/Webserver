@@ -215,7 +215,7 @@ def search_host(request):
             response = requests.get(url)
             metric_data = response.json()
 
-            do_add = False
+            #do_add = False
             for j in metric_data:
                 url = i.url + '/hosts/' + str(j.get('id')) + '/metrics/?format=json'
                 host = requests.get(url)
@@ -230,16 +230,13 @@ def search_host(request):
 
                 if cpu == 'on':
                     if 1 in all_metrics:
-                        do_add = True
+                        all_metric_data.append(j)
                 elif ram == 'on':
                     if 2 in all_metrics:
-                        do_add = True
+                        all_metric_data.append(j)
                 elif hdd == 'on':
                     if 3 in all_metrics:
-                        do_add = True
-
-            if do_add:
-                all_metric_data.extend(metric_data)
+                        all_metric_data.append(j)
 
         context = {
             'data': all_metric_data,
