@@ -8,7 +8,9 @@
         {% for monitor in monitors %}
               <div class="box_for_single_monitor">
                 <div class="image_monitor"></div><br>
+                <div class="name_for_single_monitor"><b>{{monitor.name}}</b></div><br>
                 <div class="url_for_single_monitor">{{monitor.url}}</div><br>
+
                 <div class="button_to_connect_monitor">
                   <p class="lead">
                   <a class="btn btn-success btn-lg" href="{{monitor.id}}/" role="button">Connect</a>
