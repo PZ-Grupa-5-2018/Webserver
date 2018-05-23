@@ -62,7 +62,7 @@ var check_active_sensors = function() {
 
             $.each(data, function(key, value){
                 var today = new Date();
-                if(checkTimestamp(value.measurement_timestamp, today, 30)){
+                if(checkTimestamp(value.measurement_timestamp, today, 60)){
                      html += '<tr>';
                      html += '<th scope="row">' + value.host_name + '</th>';
                      html += '<td>'+value.host_ip+'</td>';
