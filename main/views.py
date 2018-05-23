@@ -196,8 +196,6 @@ def search_host(request):
             if do_add:
                 all_metric_data.extend(metric_data)
 
-        print(all_metric_data)
-
         context = {
             'data': all_metric_data,
         }
