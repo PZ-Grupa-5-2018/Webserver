@@ -62,14 +62,9 @@ def monitors_detail(request, monitor_id):
     }
     return render(request, 'main/monitors_detail.html', context)
 
-
-def hosts_detail(request, monitor_id, host_id):
+def refreshChartMeasurments(request, monitor_id, host_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-    url = str(monitor_url) + "/hosts/" + str(host_id) + "/"
-    response = requests.get(url)
-    host_data = response.json()
-
-    url = url + "metrics/"
+    url = str(monitor_url) + "/hosts/" + str(host_id) + "/metrics/"
     response = requests.get(url)
     metrics_data = response.json()
 
@@ -84,10 +79,23 @@ def hosts_detail(request, monitor_id, host_id):
                 datetime.datetime.strptime (single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()), 'y': single_measurment["value"]})
         data_chart.append (dict (key=metric["type"], values=values))
 
+    parsed = json.loads(json.dumps(data_chart))
+    response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
+    return response
+
+def hosts_detail(request, monitor_id, host_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "/hosts/" + str(host_id) + "/"
+    response = requests.get(url)
+    host_data = response.json()
+
+    url = url + "metrics/"
+    response = requests.get(url)
+    metrics_data = response.json()
+
     context = {
         'host_data': host_data,
         'metrics_data': metrics_data,
-        'chart_data': json.dumps(data_chart),
     }
     return render(request, 'main/host_detail.html', context)
 

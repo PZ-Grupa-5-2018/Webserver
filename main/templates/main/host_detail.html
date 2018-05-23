@@ -1,4 +1,9 @@
 {% extends 'main/main.html' %}
+{% load staticfiles %}
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static '/js/refreshChartMeasurments.js' %}"></script>
+{% endblock %}
 
 {% block content %}
     <div class="card border-dark mb-3">
@@ -78,12 +83,15 @@
         {% endif %}
     </div>
 
-    <script type="text/javascript">
-        var chart_data_measurments = {{ chart_data | safe }};
-    </script>
 
     <div class="card border-dark mb-3">
         <div class="card-header">Chart measurement</div>
+
+        <div class="button_to_connect_monitor">
+            <button id="startRefresh" class="btn btn-primary" onclick="startRefresh()" disabled> Start</button>
+            <button id="stopRefresh" class="btn btn-primary" onclick="stopRefresh()" >Stop</button>
+        </div>
+
         <div class="card-body">
             <div class="chart" id="chart"><svg></svg></div>
         </div>
