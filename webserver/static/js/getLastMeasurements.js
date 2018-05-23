@@ -2,6 +2,7 @@ var interval_refresh_last_measurements = window.setInterval('update_last_20_meas
 
 var update_last_20_measurements = function() {
     $.ajax({
+        type: "GET",
         url: "get_last_measurements/",
         success: function( data ) {
             var html = '';

@@ -83,6 +83,33 @@ def refreshChartMeasurments(request, monitor_id, host_id):
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
     return response
 
+def checkActiveSensors(request, monitor_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    monitor_data = getMonitorDataFromUrl(monitor_url, 1)
+
+    sensors_measurements = []
+    for host in monitor_data["hosts"]:
+        host_ip = host["ip"]
+        host_name = host["name"]
+        host_id = host["id"]
+        for metric in host["metrics"]:
+            metric_type = metric["type"]
+            metric_id = metric["id"]
+            for measurement in metric["measurements"]:
+                single_measurement = {}
+                single_measurement["host_ip"] = host_ip
+                single_measurement["host_name"] = host_name
+                single_measurement["host_id"] = host_id
+                single_measurement["metric_type"] = metric_type
+                single_measurement["metric_id"] = metric_id
+                single_measurement["measurement_value"] = measurement["value"]
+                single_measurement["measurement_timestamp"] = measurement["timestamp"]
+                sensors_measurements.append(single_measurement)
+
+    parsed = json.loads(json.dumps(sensors_measurements))
+    response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
+    return response
+
 def hosts_detail(request, monitor_id, host_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
     url = str(monitor_url) + "/hosts/" + str(host_id) + "/"

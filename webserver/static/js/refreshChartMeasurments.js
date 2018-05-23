@@ -28,6 +28,7 @@ var drawChart =  function (dataChart) {
 
 var refresh_chart_measruments = function() {
     $.ajax({
+        type: "GET",
         url: "refresh_chart_measurements/",
         success: function( chart_data_measurments ) {
             drawChart(chart_data_measurments);
