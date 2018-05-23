@@ -107,6 +107,7 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
     metric_data = response.json()
 
     url = url + "/measurements/"
+    url = url + "?count=100"
     response = requests.get(url)
     measurements_data = response.json()
     context = {

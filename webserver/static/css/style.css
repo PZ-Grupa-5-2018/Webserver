@@ -93,3 +93,15 @@ margin:10px;
     width:50%;
     margin:0 auto;
 }
+
+#button_start_stop_charts{
+    width:100%;
+    height:60px;
+    text-align:center;
+}
+
+#button_start_stop_charts button{
+    margin:10px;
+    padding-left:30px;
+    padding-right:30px;
+}
