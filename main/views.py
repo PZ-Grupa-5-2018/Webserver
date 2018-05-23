@@ -14,7 +14,7 @@ import time
 
 def downloadMonitorDetails(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-    monitor_data = getMonitorDataFromUrl(monitor_url)
+    monitor_data = getMonitorDataFromUrl(monitor_url, 100) #downloading 100 measurements
     parsed = json.loads(json.dumps(monitor_data))
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
     response['Content-Disposition'] = 'attachment; filename='+'monitor_'+str(monitor_url)+'_data.json'

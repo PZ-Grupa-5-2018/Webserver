@@ -3,7 +3,7 @@ from typing import Any, Union, List
 import requests
 from .models import Monitor
 
-def getMonitorDataFromUrl(url):
+def getMonitorDataFromUrl(url, count=0):
     monitor_url = url
     url = str (url) + "/hosts/"
     response = requests.get (url)
@@ -16,6 +16,8 @@ def getMonitorDataFromUrl(url):
         metrics_data = []
         for metric in metrics:
             metric_url = host_url + str (metric["id"]) + "/measurements/"
+            if count:
+                metric_url = metric_url + "?count=" + str(count)
             metric_response = requests.get (metric_url)
             measurements = metric_response.json ()
             single_metric_data = metric
@@ -34,7 +36,7 @@ def getMonitorDataFromUrl(url):
 
 def getLastMeasurements(monitor_id, measurements_number):
     monitor_url = Monitor.objects.get (id=monitor_id)
-    monitor_data = getMonitorDataFromUrl (monitor_url)
+    monitor_data = getMonitorDataFromUrl (monitor_url, measurements_number)
     all_measurements = []
 
     for host in monitor_data["hosts"]:

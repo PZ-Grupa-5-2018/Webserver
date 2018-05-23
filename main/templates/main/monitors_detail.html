@@ -14,8 +14,8 @@
                 <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
                   <div class="card-header">Download</div>
                   <div class="card-body">
-                    <h4 class="card-title">Whole monitor data</h4>
-                    <p class="card-text">To download whole monitor data click button below.</p>
+                    <h4 class="card-title">Large monitor data</h4>
+                    <p class="card-text">Download 100 measurements from every host in monitor.</p>
                       <center>
                           <form action="download_monitor_data">
                               <input type="submit" value="Download" class="btn btn-primary">
@@ -31,7 +31,9 @@
                     <h4 class="card-title">Search in all monitors</h4>
                     <p class="card-text">Do you want to find something in monitors? Try our search option.</p>
                       <center>
-                          <a class="btn btn-primary btn-lg" href="/search/" role="button">Search</a>
+                          <form action="/search/">
+                              <input type="submit" value="Search" class="btn btn-primary">
+                          </form>
                       </center>
                   </div>
                 </div>
