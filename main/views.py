@@ -7,6 +7,7 @@ import requests
 from .models import Monitor
 from .utils import getMonitorDataFromUrl
 from .utils import getLastMeasurements
+from .utils import getLastMeasurementsFromMonitorList
 from django.core import serializers
 import json
 import datetime
@@ -22,8 +23,33 @@ def downloadMonitorDetails(request, monitor_id):
     return response
 
 
+def getMonitorHosts(request, monitor_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "/hosts/"
+    response = requests.get(url)
+    data = response.json()
+    context = {
+        'monitor_url': str(monitor_url),
+        'hosts': data,
+    }
+
+    parsed = json.loads(json.dumps(context))
+    response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
+
+    return response
+
+
 def getLastMeasurementsView(request, monitor_id):
     last_measurements = getLastMeasurements(monitor_id, 20)
+    parsed = json.loads(json.dumps(last_measurements))
+    response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
+
+    return response
+
+
+def getLastMeasurementsFromMonitorListView(request, monitor_list):
+    splitted_monitor_list=monitor_list.split('_')[1:-1]
+    last_measurements = getLastMeasurementsFromMonitorList(splitted_monitor_list, 20)
     parsed = json.loads(json.dumps(last_measurements))
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
 
@@ -82,6 +108,7 @@ def refreshChartMeasurments(request, monitor_id, host_id):
     parsed = json.loads(json.dumps(data_chart))
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
     return response
+
 
 def checkActiveSensors(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)

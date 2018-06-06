@@ -1,5 +1,9 @@
 {% extends 'main/main.html' %}
-
+{% load staticfiles %}
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static '/js/js.js' %}"></script>
+{% endblock %}
 {% block content %}
   <center>
     <h1 class="display-3">Monitor list</h1>
@@ -13,8 +17,16 @@
 
                 <div class="button_to_connect_monitor">
                   <p class="lead">
-                  <a class="btn btn-success btn-lg" href="{{monitor.id}}/" role="button">Connect</a>
-                </p>
+                  <a class="btn btn-success btn-lg" href="{{monitor.id}}/" role="button">Details</a>
+                  </p>
+                </div>
+                <div class="connect_to_monitor_box" id="monitor_connection_box_{{monitor.id}}">
+                  <div class="connect_to_monitor">
+                    <div class="connection_to_monitor_status">Disconnected</div>
+                    <div class="connection_to_monitor_button">
+                      <button type="button" class="btn btn-outline-success" onclick="connectToMonitor({{monitor.id}});">Connect</button>
+                    </div>
+                  </div>
                 </div>
               </div>
         {% endfor %}
@@ -23,5 +35,33 @@
       {% endif %}
     </div>
   </center>
+
+    <div class="card border-dark mb-3">
+        <div class="card-header">Host list</div>
+        <div class="card-body">
+            <h4 class="card-title">List of hosts from connected monitors.</h4>
+            <p class="card-text">If you want to get some more information about host, please click on 'Show' button in the list.</p>
+                <div id="connected_monitors_host_list_box">
+                </div>
+        </div>
+    </div>
+
+
+    <div class="card border-dark mb-3">
+            <div class="card-header">Active sensors</div>
+            <div class="card-body">
+                <h4 class="card-title">List of all active sensors in last 60 seconds.</h4>
+                <div id="list_of_active_sensors"></div>
+            </div>
+    </div>
+
+     <div class="card border-dark mb-3">
+         <div class="card-header">Last 20 measurements</div>
+         <div class="card-body">
+            <h4 class="card-title">List of last 20 measurements.</h4>
+            <p class="card-text">This list show some detailed information about last measurements.</p>
+                <div id="last_20_measurements_from_all_monitors_table"></div>
+         </div>
+     </div>
 
 {% endblock %}

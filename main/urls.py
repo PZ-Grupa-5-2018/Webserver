@@ -11,6 +11,8 @@ urlpatterns = [
     url(r'^monitors/$', views.monitors),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/$', views.monitors_detail),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/download_monitor_data', views.downloadMonitorDetails),
+    url(r'^monitors/(?P<monitor_id>[0-9]+)/get_monitor_hosts', views.getMonitorHosts),
+    url(r'^monitors/(?P<monitor_list>[\w\-]+)/get_last_measurements_from_monitor_list', views.getLastMeasurementsFromMonitorListView),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/get_last_measurements', views.getLastMeasurementsView),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/check_active_sensors', views.checkActiveSensors),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/(?P<host_id>[0-9]+)/$', views.hosts_detail),

@@ -57,3 +57,29 @@ def getLastMeasurements(monitor_id, measurements_number):
         item.update ({"id": iter})
         iter = iter + 1
     return sorted_all_measurements[:measurements_number]
+
+
+def getLastMeasurementsFromMonitorList(monitor_list, measurements_number):
+    all_measurements = []
+    for i in monitor_list:
+        monitor_url = Monitor.objects.get(id=i)
+        monitor_data = getMonitorDataFromUrl(monitor_url, measurements_number)
+
+        for host in monitor_data["hosts"]:
+            ip = host["ip"]
+            for metric in host["metrics"]:
+                type = metric["type"]
+                for measurement in metric["measurements"]:
+                    single_measurement = {}
+                    single_measurement["ip"] = ip
+                    single_measurement["monitor_url"] = str(monitor_url)
+                    single_measurement["type"] = type
+                    single_measurement["value"] = measurement["value"]
+                    single_measurement["timestamp"] = measurement["timestamp"]
+                    all_measurements.append(single_measurement)
+    sorted_all_measurements = sorted(all_measurements, key=lambda k: k["timestamp"], reverse=True)
+    iter = 1
+    for item in sorted_all_measurements:
+        item.update({"id": iter})
+        iter = iter + 1
+    return sorted_all_measurements[:measurements_number]

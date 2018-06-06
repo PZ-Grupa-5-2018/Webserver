@@ -29,10 +29,46 @@
     margin:10px;
     border-radius: 5px;
     padding:10px;
-    height:400px;
+    height:450px;
     width:400px;
     background-color: white;
     list-style-position: inside;
+}
+
+.connect_to_monitor{
+    border-radius: 5px;
+    width:100%;
+    height:60px;
+    background-color:#ffcccc;
+    padding-top:10px;
+    margin-top:10px;
+    display:inline-block;
+}
+
+.disconnect_from_monitor{
+    border-radius: 5px;
+    width:100%;
+    height:60px;
+    background-color: #ccffcc;
+    padding-top:10px;
+    margin-top:10px;
+    display:inline-block;
+}
+
+.connection_to_monitor_status{
+    width:100px;
+    height:30px;
+    float:left;
+    margin-left:52px;
+    margin-top:4px;
+    font-size:19px;
+}
+
+.connection_to_monitor_button{
+    width:100px;
+    height:30px;
+    float:right;
+    margin-right:55px;
 }
 
 .image_monitor {
