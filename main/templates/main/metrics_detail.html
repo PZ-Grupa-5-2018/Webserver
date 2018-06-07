@@ -1,5 +1,9 @@
 {% extends 'main/main.html' %}
-
+{% load staticfiles %}
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static '/js/drawChartFunction.js' %}"></script>
+{% endblock %}
 {% block content %}
     <div class="card border-dark mb-3">
         <div class="card-header">Metric</div>
