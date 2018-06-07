@@ -25,12 +25,18 @@ var drawChart =  function (dataChart) {
 });
 };
 
+var clearChart = function () {
+    var svg = d3.select("chart svg");
+    svg.selectAll("*").remove();
+}
 
 var refresh_chart_measruments = function() {
     $.ajax({
         type: "GET",
         url: "refresh_chart_measurements/",
         success: function( chart_data_measurments ) {
+            clearChart();
+            console.log(chart_data_measurments);
             drawChart(chart_data_measurments);
         },
         error: function(ts,resp,error) {

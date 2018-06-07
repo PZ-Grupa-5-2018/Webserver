@@ -1,45 +1,29 @@
-function drawChart(id, ram, cpu) {
+var drawChart =  function () {
+    nv.addGraph(function() {
+      var chart = nv.models.lineChart()
+          .useInteractiveGuideline(true);
 
-    var ctx = document.getElementById("myChart"+id).getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'horizontalBar',
-        data: {
-            labels: ["RAM usage", "CPU usage"],
-            datasets: [{
-                data: [ram, cpu],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            legend: {display: false},
-            title: {
-                display: true,
-                text: "Measurements for node with ID: " + id
-            },
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        min: 0,
-                    }
-                }]
-            }
-        }
-    })
+        chart.xAxis
+            .axisLabel('Time')
+            .tickFormat(function(d) {
+                 return d3.time.format('%x ')(new Date(d*1000))
+            });
+        ;
 
+        chart.yAxis
+            .axisLabel('Usage')
+            .tickFormat(d3.format('.02f'))
+        ;
+
+        d3.select("#singleChart svg")
+            .datum(chart_data_measurments)
+            .transition().duration(1200)
+            .call(chart);
+
+      return chart;
+});
+};
+
+window.onload = function() {
+    drawChart();
 }
