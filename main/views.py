@@ -163,10 +163,16 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
     url = url + "/measurements/"
     url = url + "?count=100"
     response = requests.get(url)
-    measurements_data = response.json()
+    measurements_data = response.json ()
+    values = []
+    for single_measurment in measurements_data:
+        values.append({'x': time.mktime(
+            datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()),
+            'y': single_measurment["value"]})
     context = {
         'metric_data': metric_data,
         'measurements_data': measurements_data,
+        'chart_data': json.dumps([dict(key=metric_data["type"], values=values)]),
     }
     return render(request, 'main/metrics_detail.html', context)
 

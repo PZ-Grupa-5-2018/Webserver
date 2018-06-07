@@ -35,6 +35,14 @@
     </div>
 
     <div class="card border-dark mb-3">
+        <div class="card-header">Chart presentation</div>
+            <div class="card-body">
+                <h4 class="card-title">Last 100 measurements</h4>
+                <div class="chart" id="singleChart"><svg></svg></div>
+         </div>
+    </div>
+
+    <div class="card border-dark mb-3">
         {% if measurements_data %}
             <div class="card-header">Measurements</div>
             <div class="card-body">
@@ -65,11 +73,14 @@
             <h4>There is no measurements.</h4>
         {% endif %}
     </div>
+
 <script>
 $(document).ready(function() {
     $('#measurements_datatable').DataTable();
 } );
+ var chart_data_measurments = {{ chart_data | safe }};
 </script>
+
 {% endblock %}
 
 
