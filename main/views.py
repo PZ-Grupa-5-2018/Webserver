@@ -153,7 +153,6 @@ def getLastMeasurementsView(request, monitor_id):
     last_measurements = getLastMeasurements(monitor_id, 20)
     parsed = json.loads(json.dumps(last_measurements))
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
-
     return response
 
 
@@ -176,7 +175,7 @@ def monitors(request):
 
 def monitors_detail(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-    url = str(monitor_url) + "/hosts/"
+    url = str(monitor_url) + "hosts/"
     response = requests.get(url)
     data = response.json()
     last_measurements = getLastMeasurements(monitor_id, 20)
@@ -192,15 +191,17 @@ def monitors_detail(request, monitor_id):
 
 def refreshChartMeasurments(request, monitor_id, host_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-    url = str(monitor_url) + "/hosts/" + str(host_id) + "/metrics/"
+    url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/"
     response = requests.get(url)
     metrics_data = response.json()
 
+
     data_chart = []
     for metric in metrics_data:
-        url = str(monitor_url) + "/hosts/" + str(host_id) + "/metrics/" + str(metric["id"]) + "/measurements"
+        url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/" + str(metric["id"]) + "/measurements"
         response = requests.get(url)
         measurements_data = response.json()
+        measurements_data= sorted(measurements_data, key=lambda k: k['timestamp'])
         values = []
         for single_measurment in measurements_data:
             values.append({'x': time.mktime(
@@ -243,7 +244,7 @@ def checkActiveSensors(request, monitor_id):
 
 def hosts_detail(request, monitor_id, host_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-    url = str(monitor_url) + "/hosts/" + str(host_id) + "/"
+    url = str(monitor_url) + "hosts/" + str(host_id) + "/"
     response = requests.get(url)
     host_data = response.json()
 
@@ -260,7 +261,7 @@ def hosts_detail(request, monitor_id, host_id):
 
 def metrics_detail(request, monitor_id, host_id, metric_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-    url = str(monitor_url) + "/hosts/" + str(host_id) + "/metrics/" + str(metric_id)
+    url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/" + str(metric_id)
     response = requests.get(url)
     metric_data = response.json()
 
@@ -274,17 +275,6 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
     }
     return render(request, 'main/metrics_detail.html', context)
 
-
-# def login(request):
-#     context = {}
-#     return render(request, 'main/login.html', context)
-
-
-# def register(request):
-#     context = {}
-#     return render(request, 'main/register.html', context)
-
-
 def search(request):
     context = {}
     return render(request, 'main/search.html', context)
@@ -295,26 +285,15 @@ def search_host(request):
     search_type = request.GET['search_type']
     monitor = Monitor.objects.all()
 
-    try:
-        cpu = request.GET['CPU']
-    except:
-        cpu = "off"
-
-    try:
-        ram = request.GET['RAM']
-    except:
-        ram = 'off'
-
-    try:
-        hdd = request.GET['HDD']
-    except:
-        hdd = 'off'
+    cpu = request.GET.get('CPU', 'off')
+    ram = request.GET.get('RAM', 'off')
+    hdd = request.GET.get('HDD', 'off')
 
     if search_type == 'generic':
         all_metric_data = []
         for i in monitor:
             url = i.url
-            url = url + '/hosts/?format=json'
+            url = url + 'hosts/?format=json'
             name = request.GET['search_generic']
             url = url + '&name=' + name
 
@@ -335,7 +314,7 @@ def search_host(request):
         all_metric_data = []
         for i in monitor:
             url = i.url
-            url = url + '/hosts/?format=json'
+            url = url + 'hosts/?format=json'
             name = request.GET['search_name']
             url = url + '&name=' + name
             ip = request.GET['search_ip']
@@ -348,7 +327,7 @@ def search_host(request):
 
             # do_add = False
             for j in metric_data:
-                url = i.url + '/hosts/' + str(j.get('id')) + '/metrics/?format=json'
+                url = i.url + 'hosts/' + str(j.get('id')) + '/metrics/?format=json'
                 host = requests.get(url)
                 host = host.json()
 
