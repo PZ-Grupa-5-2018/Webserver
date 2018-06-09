@@ -4,13 +4,16 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import requests
-from .models import Monitor
+from .models import Monitor, MyUser
 from .utils import getMonitorDataFromUrl
 from .utils import getLastMeasurements
 from django.core import serializers
 import json
 import datetime
 import time
+from .forms import MyUserForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
 
 def downloadMonitorDetails(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
@@ -144,16 +147,6 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
     return render(request, 'main/metrics_detail.html', context)
 
 
-def login(request):
-    context = {}
-    return render(request, 'main/login.html', context)
-
-
-def register(request):
-    context = {}
-    return render(request, 'main/register.html', context)
-
-
 def search(request):
     context = {}
     return render(request, 'main/search.html', context)
@@ -243,3 +236,26 @@ def search_host(request):
         }
         return render(request, 'main/search_host.html', context)
 
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        #form = MyUserForm(request.POST)
+        if form.is_valid():
+            # form.save() # zapisywanie do Users
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = MyUser(name=username, password=raw_password)
+            user.save()  # zapisywanie do My users
+            # user = authenticate(username=username, password=raw_password)
+            # login(request, user)
+            return redirect('index')
+    else:
+        form = MyUserForm()
+    return render(request, 'main/register.html', {'form': form})
+
+
+def login(request):
+
+    context = {}
+    return render(request, 'main/login.html', context)
