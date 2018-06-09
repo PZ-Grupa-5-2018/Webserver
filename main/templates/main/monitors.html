@@ -1,15 +1,14 @@
 {% extends 'main/main.html' %}
 
 {% block content %}
-  <center>
+<div class="container text-lg-center">
     <h1 class="display-3">Monitor list</h1>
     <div id="box_for_monitor_list">
       {% if monitors %}
         {% for monitor in monitors %}
               <div class="box_for_single_monitor">
                 <div class="image_monitor"></div><br>
-                <!--<div class="name_for_single_monitor"><b>{{monitor.name}}</b></div><br>-->
-                <div class="url_for_single_monitor">{{monitor.url}}</div><br>
+                <div class="url_for_single_monitor"><a href="{{ monitor }}" class="card-link">{{ monitor.name }}</a></div><br>
 
                 <div class="button_to_connect_monitor">
                   <p class="lead">
@@ -22,6 +21,6 @@
           <h4>There is no monitors.</h4>
       {% endif %}
     </div>
-  </center>
+</div>
 
 {% endblock %}

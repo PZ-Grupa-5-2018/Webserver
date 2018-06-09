@@ -1,0 +1,19 @@
+{% extends 'main/main.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+                <h2>Webserver
+                    <small>Wylogowanie</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>Zostałeś pomyślnie wylogowany! Jeśli chcesz się zalogować to kliknij <a
+                    href="{% url "login" %}">TUTAJ</a>.</p>
+        </div>
+    </div>
+
+{% endblock %}

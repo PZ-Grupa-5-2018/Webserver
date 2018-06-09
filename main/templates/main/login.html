@@ -1,5 +1,29 @@
 {% extends 'main/main.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-    STRONA LOGOWANIA
+    <div class="col-md-auto">
+        <div class="page-header">
+            <h2>Webserver
+                <small>Logowanie</small>
+            </h2>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="bs-component">
+                    <div class="alert alert-dismissible alert-danger">
+                        {{ message | safe }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form action="" method="post">{% csrf_token %}
+            {{ form | crispy }}
+            <p class="text-muted">(*) Wymagane </p>
+            <input type="submit" value="Zaloguj!" class="btn btn-primary"/>
+            <a href="{% url 'register' %}" class="top-menu">Nie masz konta ?</a>
+            <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+        </form>
+    </div>
 {% endblock %}
