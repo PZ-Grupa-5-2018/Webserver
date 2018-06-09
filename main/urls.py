@@ -1,12 +1,12 @@
 from django.urls import path
 
-from main.views import LoginPageView, LogoutPageView, ComplexMeasurementsView, RegisterUserView
+from main.views import LoginPageView, LogoutPageView, ComplexMeasurementsView, RegisterUserView, HomePageView
 from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf.urls import url
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', HomePageView.as_view(), name='index'),
     url(r'^login/$', LoginPageView.as_view(), name='login'),
     url(r'^logout/', LogoutPageView.as_view(), name='logout'),
     url(r'^register/$', RegisterUserView.as_view(), name='register'),

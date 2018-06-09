@@ -6,7 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView
+from django.views import View
+from django.views.generic import FormView, ListView
 import requests
 
 from main.forms import LoginForm, RegisterUserForm
@@ -156,17 +157,22 @@ def getLastMeasurementsView(request, monitor_id):
     return response
 
 
-def index(request):
-    menu_list = [{'name': 'monitor list', 'url': '/monitors'}, {'name': 'login', 'url': '/login'}]
-    context = {
-        'menu_list': menu_list,
-    }
-    return render(request, 'main/index.html', context)
+class HomePageView(View):
+    """
+    Strona główna
+
+    Atrybuty:
+        context                 Przekazanie danych do szablonu HTML
+        template_name           Nazwa szablonu HTML do wczytania
+    """
+    template_name = 'main/index.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
 
 
 def monitors(request):
     monitors = Monitor.objects.all()
-
     context = {
         'monitors': monitors,
     }
@@ -195,13 +201,12 @@ def refreshChartMeasurments(request, monitor_id, host_id):
     response = requests.get(url)
     metrics_data = response.json()
 
-
     data_chart = []
     for metric in metrics_data:
         url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/" + str(metric["id"]) + "/measurements"
         response = requests.get(url)
         measurements_data = response.json()
-        measurements_data= sorted(measurements_data, key=lambda k: k['timestamp'])
+        measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
         values = []
         for single_measurment in measurements_data:
             values.append({'x': time.mktime(
@@ -274,6 +279,7 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
         'measurements_data': measurements_data,
     }
     return render(request, 'main/metrics_detail.html', context)
+
 
 def search(request):
     context = {}
