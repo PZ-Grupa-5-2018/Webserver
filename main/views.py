@@ -28,18 +28,6 @@ class LoginRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
-
-class LoginAndStaffRequiredMixin(object):
-    """
-   Wszystkie widoki dziedziczące po tej klasie wymagają, aby użytkownik był zalogowany oraz miał prawa admina
-   """
-
-    @method_decorator(login_required)
-    @method_decorator(staff_member_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super(LoginAndStaffRequiredMixin, self).dispatch(request, *args, **kwargs)
-
-
 class LoginPageView(FormView):
     """
    Widok służący do logowania użytkownika
