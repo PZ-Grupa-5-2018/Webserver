@@ -28,6 +28,7 @@ class LoginRequiredMixin(object):
     def dispatch(self, request, *args, **kwargs):
         return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
 
+
 class LoginPageView(FormView):
     """
    Widok służący do logowania użytkownika
@@ -57,7 +58,7 @@ class LoginPageView(FormView):
                 if user.is_active:
                     login(request, user)
                     # Gdy jesteśmy wylogowani, a chcemy się dostać na daną podstronę, to po zalogowaniu przekierowuje nas do niej
-                    if request.POST['next']:
+                    if request.POST.get('next'):
                         return HttpResponseRedirect(request.POST['next'])
                     else:
                         return HttpResponseRedirect(self.get_success_url())
