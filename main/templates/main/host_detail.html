@@ -3,6 +3,7 @@
 {% block scripts %}
     {{ block.super }}
     <script src="{% static '/js/refreshChartMeasurments.js' %}"></script>
+    <script src="{% static '/js/historicalMeasurement.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -143,9 +144,9 @@
                 <div class="form-group">
                     <legend>Metric type</legend>
                     {% for metric in metrics_data %}
-                        <input type="checkbox" class="checkbox" name="metric_type" value="{{metric.id}}" checked> {{metric.type}} <br>
+                        <input type="checkbox" class="metric_type" name="metric_type" value="{{metric.id}}" checked> {{metric.type}} <br>
                     {% endfor %}
-                    <input type="datetime-local" class="chosenDatetime" name="chosenDatetime"  id="chosenDatetime">
+                    <input type="datetime-local" class="chosen_datetime" name="chosen_datetime">
                     <button id="draw_historical_chart" class="btn btn-primary" onclick="draw_historical_chart()" >Draw</button>
                  </div>
             </div>

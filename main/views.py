@@ -7,9 +7,12 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView
 import requests
 
+from rest_framework import status
+from rest_framework.response import Response
 from main.forms import LoginForm, RegisterUserForm
 from .models import Monitor, CustomMeasurement
 from .utils import getMonitorDataFromUrl
@@ -222,6 +225,16 @@ def monitors_detail(request, monitor_id):
     }
     return render(request, 'main/monitors_detail.html', context)
 
+@csrf_exempt
+def historical_measurements(request,monitor_id,host_id):
+    if request.is_ajax():
+        monitor_url = Monitor.objects.get(id=monitor_id)
+        url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/";
+        data = json.loads(request.body.decode('utf-8'))
+        print(data)
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    else:
+        return Response({'please move along': 'no ajax request'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def refreshChartMeasurments(request, monitor_id, host_id):
     monitor_url = Monitor.objects.get(id=monitor_id)

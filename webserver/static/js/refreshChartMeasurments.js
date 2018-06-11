@@ -59,26 +59,4 @@ function stopRefresh(){
     document.getElementById("stopRefresh").disabled = true;
 }
 
-function draw_historical_chart() {
-    var chkArray = [];
 
-	$(".checkbox:checked").each(function() {
-		chkArray.push($(this).val());
-	});
-
-	var dateTime = $('.chosenDatetime').val();
-	console.log(chkArray);
-	console.log(dateTime);
-
-	if(chkArray.length < 1){
-		alert("Please at least check one of the metric type");
-	}
-	else{
-	    //wysylamy jebane zapytanie
-    }
-}
-
-window.onload = function() {
-    var isoStr = new Date().toISOString();
-    $('#chosenDatetime').val(isoStr.substring(0,isoStr.length-1));
-}
