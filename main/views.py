@@ -11,7 +11,7 @@ from django.views.generic import FormView, ListView
 import requests
 
 from main.forms import LoginForm, RegisterUserForm
-from .models import Monitor
+from .models import Monitor, CustomMeasurement
 from .utils import getMonitorDataFromUrl
 from .utils import getLastMeasurements
 from .utils import getLastMeasurementsFromMonitorList
@@ -98,7 +98,19 @@ class ComplexMeasurementsView(LoginRequiredMixin, FormView):
     template_name = 'main/complex_measurements.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        if request.user.is_authenticated:
+            all_custom_measurements = CustomMeasurement.objects.order_by('-id')
+            user_measurements = []
+            for obiekt in all_custom_measurements:
+                if obiekt.owner == request.user:
+                    user_measurements.append(obiekt)
+            context = {
+                'data': user_measurements,
+            }
+            if request.method == 'POST':
+                de = request.GET['delete_value']
+                print(de)
+        return render(request, self.template_name, context)
 
 
 class RegisterUserView(FormView):
@@ -161,7 +173,6 @@ def getLastMeasurementsView(request, monitor_id):
     last_measurements = getLastMeasurements(monitor_id, 20)
     parsed = json.loads(json.dumps(last_measurements))
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
-
     return response
 
 
