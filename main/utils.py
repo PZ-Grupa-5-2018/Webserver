@@ -5,9 +5,9 @@ from .models import Monitor
 
 def getMonitorDataFromUrl(url, count=0):
     monitor_url = url
-    url = str (url) + "/hosts/"
-    response = requests.get (url)
-    hosts = response.json ()
+    url = str (url) + "hosts/"
+    response = requests.get(url)
+    hosts = response.json()
     hosts_data = []
     for host in hosts:
         host_url = url + str (host["id"]) + "/metrics/"
@@ -35,7 +35,8 @@ def getMonitorDataFromUrl(url, count=0):
 
 
 def getLastMeasurements(monitor_id, measurements_number):
-    monitor_url = Monitor.objects.get (id=monitor_id)
+    monitor_url = Monitor.objects.get(id=monitor_id).url
+
     monitor_data = getMonitorDataFromUrl (monitor_url, measurements_number)
     all_measurements = []
 

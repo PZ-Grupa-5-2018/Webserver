@@ -1,0 +1,45 @@
+{% extends 'main/main.html' %}
+{% block content %}
+    <div class="jumbotron">
+
+        <h1 class="display-3">Complex Measurements</h1>
+    {% if data %}
+            <div id="hosts_table">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">URL</th>
+                      <th scope="col">Details</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                  </thead>
+                    <tbody>
+                        {% for custom in data %}
+                    <tr>
+                      <th scope="row">{{ custom.id }}</th>
+                      <td>{{ custom.name }}</td>
+                      <td>{{ custom.url }}</td>
+                      <td> <a href="/monitors/{{ custom.id }}/hosts/{{ custom.id }}"> Detail </a></td>
+                        <form action="" method="post">
+                            <input type="text" hidden name="delete_value" value="{{ custom.id }}"/>
+                            <td> <a href="/complexMeasurements" name="delete{{ custom.id }}"> Delete </a></td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="button_to_connect_monitor">
+                <p class="lead">
+                    <a class="btn btn-success btn-lg" href="/complexMeasurements" role="button">Add new custom measurement</a>
+                </p>
+            </div>
+    {% else %}
+            <h4>You have no </h4>
+    {% endif %}
+    </div>
+{% endblock %}
