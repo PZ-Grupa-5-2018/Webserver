@@ -389,11 +389,38 @@ def addComplexMeasurement(request, monitor_id, host_id):
     custom_measurement_name = request.GET.get('custom_measurement_name', 'off')
     metric_type = request.GET.get('metric_type', 'off')
     time_period = request.GET.get('time_period', 'off')
-    print("custom_measurement_name: "+custom_measurement_name+" metric_type: "+metric_type+" time_period: "+time_period)
 
 
+    url = str(monitor_url) + "hosts/" + str(host_id)+ "/metrics/"
+    headers = {'Content-type': 'application/json'}
 
-    state = "success"
+    data = {}
+
+    get_response = requests.get(url)
+    metrics_data = get_response.json()
+
+    metric_id = 0
+    for metric in metrics_data:
+        if metric["type"] == metric_type:
+            metric_id = metric["id"]
+            break
+
+    #print("custom_measurement_name: "+custom_measurement_name+" metric_type: "+metric_type+" time_period: "+time_period+" metric_id: "+str(metric_id))
+
+    data['metric_id'] = str(metric_id)
+    data['type'] = str("mean")
+    data['period_seconds'] = str(time_period)
+
+    json_data = json.dumps(data)
+    json_data = json.loads(json_data)
+
+    response = requests.post(url, data=json.dumps(json_data), headers=headers)
+
+    if response.ok:
+        state = "successful"
+    else:
+        state = "unsuccessful"
+
     context = {
         "state": state
     }
