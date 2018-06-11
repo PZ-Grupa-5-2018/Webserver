@@ -445,14 +445,11 @@ class ComplexMeasurementsDelete(LoginRequiredMixin, FormView):
 
     def get(self, request, custom_id, **kwargs):
         if request.user.is_authenticated:
-            cs = CustomMeasurement.objects.get(id=custom_id).owner
+            cs_user = CustomMeasurement.objects.get(id=custom_id).owner
+            cs = CustomMeasurement.objects.get(id=custom_id)
+            if request.user == cs_user:
+                delete_url = cs.url + "/hosts" + str(cs.host_id) + "/metrics/" + str(cs.metric_id)
+                requests.delete(delete_url)
+                cs.delete()
 
-            if request.user == cs:
-                CustomMeasurement.objects.get(id=custom_id).delete()
             return HttpResponseRedirect(reverse('complex_measurements'))
-
-        #    monitor_url = "https://pz-monitor-2.herokuapp.com"
-        #    host_id = 5
-        #    metric_id = 22
-        #    delete_url = monitor_url + "/hosts/" + str(host_id) + "/metrics/" + str(metric_id)
-        #    response = requests.delete(delete_url)
