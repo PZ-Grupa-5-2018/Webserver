@@ -385,9 +385,13 @@ def search_host(request):
 
 def addComplexMeasurement(request, monitor_id, host_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-    url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/"
-    response = requests.get(url)
-    metrics_data = response.json()
+
+    custom_measurement_name = request.GET.get('custom_measurement_name', 'off')
+    metric_type = request.GET.get('metric_type', 'off')
+    time_period = request.GET.get('time_period', 'off')
+    print("custom_measurement_name: "+custom_measurement_name+" metric_type: "+metric_type+" time_period: "+time_period)
+
+
 
     state = "success"
     context = {
