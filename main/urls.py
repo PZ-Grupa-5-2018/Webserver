@@ -1,6 +1,6 @@
 from django.urls import path
 
-from main.views import LoginPageView, LogoutPageView, ComplexMeasurementsView, RegisterUserView, HomePageView
+from main.views import LoginPageView, LogoutPageView, ComplexMeasurementsView, RegisterUserView, HomePageView, addComplexMeasurement
 from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf.urls import url
@@ -25,8 +25,7 @@ urlpatterns = [
         views.metrics_detail),
     url(r'^search/$', views.search, name='search'),
     url(r'^search/search_host/', views.search_host, name='search_host'),
-    url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/(?P<host_id>[0-9]+)/add_complex_measurement',
-        views.addComplexMeasurement),
+    url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/(?P<host_id>[0-9]+)/add_complex_measurement/', addComplexMeasurement.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

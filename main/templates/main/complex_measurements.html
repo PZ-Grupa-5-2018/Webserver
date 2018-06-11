@@ -4,10 +4,8 @@
     {% if state %}
         State of adding complex measurement: {{state}}.<br>
     {% endif %}
-
-List of complex measurements
 {% else %}
-    Tylko zalogowany użytkownik może zobaczyć zawartość tej podstrony.
+    You must login to see this page content.
 {% endif %}
     <div class="jumbotron">
 
@@ -17,9 +15,11 @@ List of complex measurements
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">ID</th>
                       <th scope="col">Name</th>
-                      <th scope="col">URL</th>
+                      <th scope="col">Monitor URL</th>
+                      <th scope="col">Host ID</th>
+                      <th scope="col">Metric type</th>
+                      <th scope="col">Time period</th>
                       <th scope="col">Details</th>
                       <th scope="col">Delete</th>
                     </tr>
@@ -27,10 +27,12 @@ List of complex measurements
                     <tbody>
                         {% for custom in data %}
                     <tr>
-                      <th scope="row">{{ custom.id }}</th>
-                      <td>{{ custom.name }}</td>
+                      <th scope="row">{{ custom.name }}</th>
                       <td>{{ custom.url }}</td>
-                      <td> <a href="/monitors/{{ custom.id }}/hosts/{{ custom.id }}"> Detail </a></td>
+                      <td>{{ custom.host_id }}</td>
+                      <td>{{ custom.metric_type }}</td>
+                      <td>{{ custom.period }}</td>
+                      <td> <a href="/monitors/{{ custom.monitor_id }}/hosts/{{ custom.host_id }}/metrics/{{ custom.metric_id }}"> Detail </a></td>
                         <form action="" method="post">
                             <input type="text" hidden name="delete_value" value="{{ custom.id }}"/>
                             <td> <a href="/complexMeasurements" name="delete{{ custom.id }}"> Delete </a></td>
@@ -41,14 +43,8 @@ List of complex measurements
                     </tbody>
                 </table>
             </div>
-
-            <div class="button_to_connect_monitor">
-                <p class="lead">
-                    <a class="btn btn-success btn-lg" href="/complexMeasurements" role="button">Add new custom measurement</a>
-                </p>
-            </div>
     {% else %}
-            <h4>You have no </h4>
+            <h4>You have no complex measurements.</h4>
     {% endif %}
     </div>
 {% endblock %}
