@@ -107,9 +107,6 @@ class ComplexMeasurementsView(LoginRequiredMixin, FormView):
             context = {
                 'data': user_measurements,
             }
-            if request.method == 'POST':
-                de = request.GET['delete_value']
-                print(de)
         return render(request, self.template_name, context)
 
 
@@ -437,3 +434,25 @@ def addComplexMeasurement(request, monitor_id, host_id):
     }
 
     return render(request, 'main/complex_measurements.html', context)
+
+
+class ComplexMeasurementsDelete(LoginRequiredMixin, FormView):
+    """
+   Widok służący do kasowania custom measurementów
+   Dostęp do niego ma jedynie użytkownik zalogowany
+   """
+
+
+    def get(self, request, custom_id, **kwargs):
+        if request.user.is_authenticated:
+            cs = CustomMeasurement.objects.get(id=custom_id).owner
+
+            if request.user == cs:
+                CustomMeasurement.objects.get(id=custom_id).delete()
+            return HttpResponseRedirect(reverse('complex_measurements'))
+
+        #    monitor_url = "https://pz-monitor-2.herokuapp.com"
+        #    host_id = 5
+        #    metric_id = 22
+        #    delete_url = monitor_url + "/hosts/" + str(host_id) + "/metrics/" + str(metric_id)
+        #    response = requests.delete(delete_url)
