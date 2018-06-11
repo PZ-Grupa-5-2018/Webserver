@@ -4,7 +4,7 @@ var drawChart =  function (dataChart) {
     nv.addGraph(function() {
         d3.selectAll('.nvtooltip').remove();
       var chart = nv.models.lineChart()
-          .useInteractiveGuideline(true)
+          .useInteractiveGuideline(false)
       ;
         chart.xAxis
             .axisLabel('Time')
@@ -57,4 +57,28 @@ function stopRefresh(){
     clearInterval(interval_refresh_last_measurements);
     document.getElementById("startRefresh").disabled = false;
     document.getElementById("stopRefresh").disabled = true;
+}
+
+function draw_historical_chart() {
+    var chkArray = [];
+
+	$(".checkbox:checked").each(function() {
+		chkArray.push($(this).val());
+	});
+
+	var dateTime = $('.chosenDatetime').val();
+	console.log(chkArray);
+	console.log(dateTime);
+
+	if(chkArray.length < 1){
+		alert("Please at least check one of the metric type");
+	}
+	else{
+	    //wysylamy jebane zapytanie
+    }
+}
+
+window.onload = function() {
+    var isoStr = new Date().toISOString();
+    $('#chosenDatetime').val(isoStr.substring(0,isoStr.length-1));
 }

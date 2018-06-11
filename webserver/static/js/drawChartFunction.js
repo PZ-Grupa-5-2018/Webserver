@@ -1,7 +1,7 @@
 var drawSingleChart =  function () {
     nv.addGraph(function() {
       var chart = nv.models.lineChart()
-          .useInteractiveGuideline(true);
+          .useInteractiveGuideline(false);
 
         chart.xAxis
             .axisLabel('Time')

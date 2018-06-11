@@ -51,38 +51,17 @@
             {% endif %}
     </div>
 
+
     <div class="card border-dark mb-3">
-        <div class="card-header">Add custom measurement</div>
+        <div class="card-header">Chart measurement</div>
+
+        <div id="button_start_stop_charts">
+            <button id="startRefresh" class="btn btn-primary" onclick="startRefresh()" disabled> Start</button>
+            <button id="stopRefresh" class="btn btn-primary" onclick="stopRefresh()" >Stop</button>
+        </div>
+
         <div class="card-body">
-            {% if request.user.is_authenticated %}
-                <h4 class="card-title">This form allow to add custom measurement.</h4>
-                <p class="card-text">Set name, type and period of time. Measurement can be removed only by the user who added it.</p>
-                <form method="get" action="add_complex_measurement">
-                  <fieldset>
-                    <div class="form-group">
-                      <legend>Name</legend>
-                      <input type="text" class="form-control" name="custom_measurement_name" placeholder="Name">
-                    </div>
-
-                    <div class="form-group">
-                      <legend>Metric type</legend>
-                        <input type="radio" name="metric_type" value="RAM" checked> RAM <br>
-                        <input type="radio" name="metric_type" value="CPU"> CPU <br>
-                        <input type="radio" name="metric_type" value="HDD"> HDD
-                    </div>
-
-
-                    <div class="form-group">
-                      <legend>Time period in seconds</legend>
-                      <input type="number" class="form-control" name="time_period" placeholder="e.g 300">
-                    </div>
-
-                        <button type="submit" class="btn btn-primary">ADD</button>
-                    </fieldset>
-                </form>
-            {% else %}
-            <h4 class="card-title">You must log in to add custom measurements.</h4>
-        {% endif %}
+            <div class="chart" id="chart"><svg></svg></div>
         </div>
     </div>
 
@@ -122,17 +101,55 @@
         {% endif %}
     </div>
 
+
     <div class="card border-dark mb-3">
-        <div class="card-header">Chart measurement</div>
-
-        <div id="button_start_stop_charts">
-            <button id="startRefresh" class="btn btn-primary" onclick="startRefresh()" disabled> Start</button>
-            <button id="stopRefresh" class="btn btn-primary" onclick="stopRefresh()" >Stop</button>
-        </div>
-
+        <div class="card-header">Add custom measurement</div>
         <div class="card-body">
-            <div class="chart" id="chart"><svg></svg></div>
+            {% if request.user.is_authenticated %}
+                <h4 class="card-title">This form allow to add custom measurement.</h4>
+                <p class="card-text">Set name, type and period of time. Measurement can be removed only by the user who added it.</p>
+                <form method="get" action="add_complex_measurement">
+                  <fieldset>
+                    <div class="form-group">
+                      <legend>Name</legend>
+                      <input type="text" class="form-control" name="custom_measurement_name" placeholder="Name">
+                    </div>
+
+                    <div class="form-group">
+                      <legend>Metric type</legend>
+                        <input type="radio" name="metric_type" value="RAM" checked> RAM <br>
+                        <input type="radio" name="metric_type" value="CPU"> CPU <br>
+                        <input type="radio" name="metric_type" value="HDD"> HDD
+                    </div>
+
+
+                    <div class="form-group">
+                      <legend>Time period in seconds</legend>
+                      <input type="number" class="form-control" name="time_period" placeholder="e.g 300">
+                    </div>
+
+                        <button type="submit" class="btn btn-primary">ADD</button>
+                    </fieldset>
+                </form>
+            {% else %}
+            <h4 class="card-title">You must log in to add custom measurements.</h4>
+        {% endif %}
         </div>
+    </div>
+
+    <div class="card border-dark mb-3">
+        <div class="card-header">Historical measurements</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <legend>Metric type</legend>
+                    {% for metric in metrics_data %}
+                        <input type="checkbox" class="checkbox" name="metric_type" value="{{metric.id}}" checked> {{metric.type}} <br>
+                    {% endfor %}
+                    <input type="datetime-local" class="chosenDatetime" name="chosenDatetime"  id="chosenDatetime">
+                    <button id="draw_historical_chart" class="btn btn-primary" onclick="draw_historical_chart()" >Draw</button>
+                 </div>
+            </div>
+            <div class="chart" id="historical_chart"><svg></svg></div>
     </div>
 
 <script>

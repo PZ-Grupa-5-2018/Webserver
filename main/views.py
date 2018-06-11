@@ -234,12 +234,13 @@ def refreshChartMeasurments(request, monitor_id, host_id):
         url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/" + str(metric["id"]) + "/measurements"
         response = requests.get(url)
         measurements_data = response.json()
-        measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
+        #measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
         values = []
         for single_measurment in measurements_data:
-            values.append({'x': time.mktime(
-                datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple()),
-                'y': single_measurment["value"]})
+            if not single_measurment == "detail":
+                values.append({'x': time.mktime(
+                    datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple()),
+                    'y': single_measurment["value"]})
         data_chart.append(dict(key=metric["type"], values=values))
 
     parsed = json.loads(json.dumps(data_chart))
@@ -304,9 +305,10 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
     measurements_data = response.json ()
     values = []
     for single_measurment in measurements_data:
-        values.append({'x': time.mktime(
-            datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()),
-            'y': single_measurment["value"]})
+        if not single_measurment == "detail":
+            values.append({'x': time.mktime(
+                datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()),
+                'y': single_measurment["value"]})
     context = {
         'metric_data': metric_data,
         'measurements_data': measurements_data,
