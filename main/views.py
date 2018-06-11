@@ -143,7 +143,7 @@ def downloadMonitorDetails(request, monitor_id):
 
 def getMonitorHosts(request, monitor_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
-    url = str(monitor_url) + "/hosts/"
+    url = str(monitor_url) + "hosts/"
     response = requests.get(url)
     data = response.json()
     context = {
