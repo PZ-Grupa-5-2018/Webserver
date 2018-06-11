@@ -428,18 +428,7 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
         json_data = json.loads(json_data)
 
         response = requests.post(url, data=json.dumps(json_data), headers=headers)
-
         if response.ok:
-            #tutaj musimy znalesc id metryki (mozna przeniesc do widoku tworzacego liste)... po jej dodaniu bo jest unikatowe i nie znamy go wczesniej
-            # url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/"
-            # get_response = requests.get(url)
-            # metrics_data = get_response.json()
-            # target_metric_id = 0
-            # for metric in metrics_data:
-            #     if metric["type"] == metric_type and metric["metric_id"] == metric_id and metric["period_seconds"] == time_period :
-            #         target_metric_id = metric["id"]
-            #         break
-
             cs = CustomMeasurement(
                 owner=request.user,
                 name=str(custom_measurement_name),
@@ -447,7 +436,7 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
                 metric_type=str(metric_type),
                 host_id=host_id,
                 monitor_id=monitor_id,
-                metric_id=metric_id,
+                metric_id=response.json()['id'],
                 period=time_period
             )
             cs.save()
