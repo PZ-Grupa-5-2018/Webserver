@@ -1,6 +1,7 @@
 from django.urls import path
 
-from main.views import LoginPageView, LogoutPageView, ComplexMeasurementsView, RegisterUserView, HomePageView, addComplexMeasurement
+from main.views import LoginPageView, LogoutPageView, ComplexMeasurementsView, RegisterUserView, HomePageView, \
+    addComplexMeasurement, historical_measurements
 from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf.urls import url
@@ -11,6 +12,7 @@ urlpatterns = [
     url(r'^logout/', LogoutPageView.as_view(), name='logout'),
     url(r'^register/$', RegisterUserView.as_view(), name='register'),
     url(r'^complexMeasurements/$', ComplexMeasurementsView.as_view(), name='complex_measurements'),
+    url(r'^historicalMeasurements/$', historical_measurements, name='historical_measurements'),
     url(r'^monitors/$', views.monitors, name='monitors'),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/$', views.monitors_detail),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/download_monitor_data', views.downloadMonitorDetails),

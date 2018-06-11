@@ -7,6 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView
 import requests
 
@@ -20,6 +21,7 @@ import json
 import datetime
 import time
 from django.contrib.auth.models import User
+
 
 class LoginRequiredMixin(object):
     """
@@ -67,6 +69,18 @@ class LoginPageView(FormView):
             else:
                 messages.error(request, '<strong>Błąd:</strong> Błędna nazwa użytkownika lub hasło.')
         return render(request, self.template_name, {'form': form})
+
+
+@csrf_exempt
+def historical_measurements(request):
+    # TO tez trzeba ladnie sprawdzi
+    # if request.is_ajax():
+    #     ...
+    # else:
+    #     ...
+    data = json.loads(request.body)
+    print(data)
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 class LogoutPageView(LoginRequiredMixin, FormView):
@@ -177,7 +191,7 @@ def getLastMeasurementsView(request, monitor_id):
 
 
 def getLastMeasurementsFromMonitorListView(request, monitor_list):
-    splitted_monitor_list=monitor_list.split('_')[1:-1]
+    splitted_monitor_list = monitor_list.split('_')[1:-1]
     last_measurements = getLastMeasurementsFromMonitorList(splitted_monitor_list, 20)
     parsed = json.loads(json.dumps(last_measurements))
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
@@ -234,7 +248,7 @@ def refreshChartMeasurments(request, monitor_id, host_id):
         url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/" + str(metric["id"]) + "/measurements"
         response = requests.get(url)
         measurements_data = response.json()
-        #measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
+        # measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
         values = []
         for single_measurment in measurements_data:
             if not single_measurment == "detail":
@@ -302,12 +316,12 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
     url = url + "/measurements/"
     url = url + "?count=100"
     response = requests.get(url)
-    measurements_data = response.json ()
+    measurements_data = response.json()
     values = []
     for single_measurment in measurements_data:
         if not single_measurment == "detail":
             values.append({'x': time.mktime(
-                datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()),
+                datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple()),
                 'y': single_measurment["value"]})
     context = {
         'metric_data': metric_data,
@@ -397,7 +411,6 @@ def search_host(request):
 
 
 class addComplexMeasurement(LoginRequiredMixin, FormView):
-
     def get(self, request, monitor_id, host_id):
         monitor_url = Monitor.objects.get(id=monitor_id)
 
@@ -405,8 +418,7 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
         metric_type = request.GET.get('metric_type', 'off')
         time_period = request.GET.get('time_period', 'off')
 
-
-        url = str(monitor_url) + "hosts/" + str(host_id)+ "/metrics/"
+        url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/"
         headers = {'Content-type': 'application/json'}
 
         data = {}
@@ -420,7 +432,7 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
                 metric_id = metric["id"]
                 break
 
-        #print("custom_measurement_name: "+custom_measurement_name+" metric_type: "+metric_type+" time_period: "+time_period+" metric_id: "+str(metric_id))
+        # print("custom_measurement_name: "+custom_measurement_name+" metric_type: "+metric_type+" time_period: "+time_period+" metric_id: "+str(metric_id))
 
         data['metric_id'] = str(metric_id)
         data['type'] = str("mean")
@@ -432,7 +444,7 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
         response = requests.post(url, data=json.dumps(json_data), headers=headers)
 
         if response.ok:
-            #tutaj musimy znalesc id metryki (mozna przeniesc do widoku tworzacego liste)... po jej dodaniu bo jest unikatowe i nie znamy go wczesniej
+            # tutaj musimy znalesc id metryki (mozna przeniesc do widoku tworzacego liste)... po jej dodaniu bo jest unikatowe i nie znamy go wczesniej
             # url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/"
             # get_response = requests.get(url)
             # metrics_data = get_response.json()
