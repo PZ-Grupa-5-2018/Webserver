@@ -381,3 +381,17 @@ def search_host(request):
             'data': all_metric_data,
         }
         return render(request, 'main/search_host.html', context)
+
+
+def addComplexMeasurement(request, monitor_id, host_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/"
+    response = requests.get(url)
+    metrics_data = response.json()
+
+    state = "success"
+    context = {
+        "state": state
+    }
+
+    return render(request, 'main/complex_measurements.html', context)

@@ -1,4 +1,12 @@
 {% extends 'main/main.html' %}
 {% block content %}
-    TEST
+{% if request.user.is_authenticated %}
+    {% if state %}
+        State of adding complex measurement: {{state}}.<br>
+    {% endif %}
+
+List of complex measurements
+{% else %}
+    Tylko zalogowany użytkownik może zobaczyć zawartość tej podstrony.
+{% endif %}
 {% endblock %}

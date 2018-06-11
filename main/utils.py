@@ -45,12 +45,13 @@ def getLastMeasurements(monitor_id, measurements_number):
         for metric in host["metrics"]:
             type = metric["type"]
             for measurement in metric["measurements"]:
-                single_measurement = {}
-                single_measurement["ip"] = ip
-                single_measurement["type"] = type
-                single_measurement["value"] = measurement["value"]
-                single_measurement["timestamp"] = measurement["timestamp"]
-                all_measurements.append (single_measurement)
+                if not "detail" in measurement:
+                    single_measurement = {}
+                    single_measurement["ip"] = ip
+                    single_measurement["type"] = type
+                    single_measurement["value"] = measurement["value"]
+                    single_measurement["timestamp"] = measurement["timestamp"]
+                    all_measurements.append (single_measurement)
 
     sorted_all_measurements = sorted (all_measurements, key=lambda k: k["timestamp"], reverse=True)
     iter = 1
@@ -71,13 +72,14 @@ def getLastMeasurementsFromMonitorList(monitor_list, measurements_number):
             for metric in host["metrics"]:
                 type = metric["type"]
                 for measurement in metric["measurements"]:
-                    single_measurement = {}
-                    single_measurement["ip"] = ip
-                    single_measurement["monitor_url"] = str(monitor_url)
-                    single_measurement["type"] = type
-                    single_measurement["value"] = measurement["value"]
-                    single_measurement["timestamp"] = measurement["timestamp"]
-                    all_measurements.append(single_measurement)
+                    if not "detail" in measurement:
+                        single_measurement = {}
+                        single_measurement["ip"] = ip
+                        single_measurement["monitor_url"] = str(monitor_url)
+                        single_measurement["type"] = type
+                        single_measurement["value"] = measurement["value"]
+                        single_measurement["timestamp"] = measurement["timestamp"]
+                        all_measurements.append(single_measurement)
     sorted_all_measurements = sorted(all_measurements, key=lambda k: k["timestamp"], reverse=True)
     iter = 1
     for item in sorted_all_measurements:
