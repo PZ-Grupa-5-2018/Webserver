@@ -2,6 +2,7 @@ var interval_refresh_last_measurements = window.setInterval('refresh_chart_measr
 
 var drawChart =  function (dataChart) {
     nv.addGraph(function() {
+        d3.selectAll('.nvtooltip').remove();
       var chart = nv.models.lineChart()
           .useInteractiveGuideline(true)
       ;
@@ -10,7 +11,7 @@ var drawChart =  function (dataChart) {
             .tickFormat(function(d) {
                  return d3.time.format('%X')(new Date(d*1000))
             });
-        ;
+
         chart.yAxis
             .axisLabel('Usage')
             .tickFormat(d3.format('.02f'))

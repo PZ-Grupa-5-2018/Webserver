@@ -1,5 +1,17 @@
 {% extends 'main/main.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-    STRONA REJESTRACJI
+    <div class="col-md-auto">
+        <div class="page-header">
+            <h2>Webserver
+                <small>Rejestracja konta</small>
+            </h2>
+        </div>
+        <form action="" method="post">{% csrf_token %}
+            {{ user_form | crispy }}
+            <p class="text-muted">(*) Wymagane </p>
+            <input type="submit" value="Zarejestruj!" class="btn btn-primary btn-block"/>
+        </form>
+    </div>
+
 {% endblock %}

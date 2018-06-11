@@ -7,73 +7,71 @@
 {% endblock %}
 {% block content %}
 
-    <center><h1 class="display-3">{{url}}</h1></center>
-    <br>
-    <center>
+    <div class="container text-lg-center"><h1 class="display-3">{{ url }}</h1>
+        <br>
         <div class="cards_box">
             <div class="monitor_card">
                 <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-                  <div class="card-header">Download</div>
-                  <div class="card-body">
-                    <h4 class="card-title">Large monitor data</h4>
-                    <p class="card-text">Download 100 measurements from every host in monitor.</p>
-                      <center>
-                          <form action="download_monitor_data">
-                              <input type="submit" value="Download" class="btn btn-primary">
-                          </form>
-                      </center>
-                  </div>
+                    <div class="card-header">Download</div>
+                    <div class="card-body">
+                        <h4 class="card-title">Large monitor data</h4>
+                        <p class="card-text">Download 100 measurements from every host in monitor.</p>
+                        <center>
+                            <form action="download_monitor_data">
+                                <input type="submit" value="Download" class="btn btn-primary">
+                            </form>
+                        </center>
+                    </div>
                 </div>
             </div>
             <div class="monitor_card">
                 <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-                  <div class="card-header">Search</div>
-                  <div class="card-body">
-                    <h4 class="card-title">Search in all monitors</h4>
-                    <p class="card-text">Do you want to find something in monitors? Try our search option.</p>
-                      <center>
-                          <form action="/search/">
-                              <input type="submit" value="Search" class="btn btn-primary">
-                          </form>
-                      </center>
-                  </div>
+                    <div class="card-header">Search</div>
+                    <div class="card-body">
+                        <h4 class="card-title">Search in all monitors</h4>
+                        <p class="card-text">Do you want to find something in monitors? Try our search option.</p>
+                        <form action="/search/">
+                            <input type="submit" value="Search" class="btn btn-primary">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </center>
+    </div>
     <div class="card border-dark mb-3">
         {% if hosts %}
-        <div class="card-header">Host list</div>
-        <div class="card-body">
-            <h4 class="card-title">List of all hosts.</h4>
-            <p class="card-text">If you want to get some more information about host, please click on 'Show' button in the list.</p>
-            <table id="host_datatable" class="table table-striped table-bordered">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">IP</th>
-                    <th scope="col">Mac</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">CPU</th>
-                    <th scope="col">Memory</th>
-                    <th scope="col">Details</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for host in hosts %}
-                <tr>
-                    <th scope="row">{{host.id}}</th>
-                    <td>{{host.ip}}</td>
-                    <td>{{host.mac}}</td>
-                    <td>{{host.name}}</td>
-                    <td>{{host.cpu}}</td>
-                    <td>{{host.memory}}</td>
-                    <td> <a href="hosts/{{host.id}}/">Show</a></td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            <div class="card-header">Host list</div>
+            <div class="card-body">
+                <h4 class="card-title">List of all hosts.</h4>
+                <p class="card-text">If you want to get some more information about host, please click on 'Show' button
+                    in the list.</p>
+                <table id="host_datatable" class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">IP</th>
+                        <th scope="col">Mac</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">CPU</th>
+                        <th scope="col">Memory</th>
+                        <th scope="col">Details</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for host in hosts %}
+                        <tr>
+                            <th scope="row">{{ host.id }}</th>
+                            <td>{{ host.ip }}</td>
+                            <td>{{ host.mac }}</td>
+                            <td>{{ host.name }}</td>
+                            <td>{{ host.cpu }}</td>
+                            <td>{{ host.memory }}</td>
+                            <td><a href="hosts/{{ host.id }}/">Show</a></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
             <h4>There is no hosts.</h4>
         {% endif %}
@@ -81,30 +79,30 @@
     </div>
 
     <div class="card border-dark mb-3">
-            <div class="card-header">Active sensors</div>
-            <div class="card-body">
-                <h4 class="card-title">List of all active sensors in last 60 seconds.</h4>
-                <div id="list_of_active_sensors"></div>
-            </div>
+        <div class="card-header">Active sensors</div>
+        <div class="card-body">
+            <h4 class="card-title">List of all active sensors in last 60 seconds.</h4>
+            <div id="list_of_active_sensors"></div>
+        </div>
     </div>
 
-     <div class="card border-dark mb-3">
-         {% if last_measurements %}
-         <div class="card-header">Last 20 measurements</div>
-         <div class="card-body">
-            <h4 class="card-title">List of last 20 measurements.</h4>
-            <p class="card-text">This list show some detailed information about last measurements.</p>
+    <div class="card border-dark mb-3">
+        {% if last_measurements %}
+            <div class="card-header">Last 20 measurements</div>
+            <div class="card-body">
+                <h4 class="card-title">List of last 20 measurements.</h4>
+                <p class="card-text">This list show some detailed information about last measurements.</p>
                 <div id="last_20_measurements_table"></div>
-             </div>
-         {% else %}
+            </div>
+        {% else %}
             <h4>There is no measurements.</h4>
         {% endif %}
-     </div>
-<script>
-$(document).ready(function() {
-    $('#host_datatable').DataTable();
-} );
-</script>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#host_datatable').DataTable();
+        });
+    </script>
 {% endblock %}
 
 
