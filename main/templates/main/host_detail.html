@@ -53,6 +53,35 @@
     </div>
 
 
+            <div class="monitor_card">
+                <div class="card text-white bg-success mb-3" style="max-width: 20rem; ">
+                    <div class="card-header">Custom metric</div>
+                    <div class="card-body">
+                        <h4 class="card-title">Add custom metric</h4>
+                        <p class="card-text">Create your own metric fulfilled with mean measurements!</p>
+                        <center>
+                            <form action="add_custom_measurement_page">
+                                <input type="submit" value="Add" class="btn btn-primary">
+                            </form>
+                        </center>
+                    </div>
+                </div>
+                <div class="card text-white bg-success mb-3" style="max-width: 20rem; ">
+                    <div class="card-header">Custom measurements</div>
+                    <div class="card-body">
+                        <h4 class="card-title">Show custom measurements</h4>
+                        <p class="card-text">Show all yours custom measurements. You must log in to see the content.</p>
+                        <center>
+                            <form action="/complexMeasurements">
+                                <input type="submit" value="Show" class="btn btn-primary">
+                            </form>
+                        </center>
+                    </div>
+                </div>
+            </div>
+
+
+
     <div class="card border-dark mb-3">
         <div class="card-header">Chart measurement</div>
 
@@ -100,42 +129,6 @@
         {% else %}
             <h4>There is no metrics.</h4>
         {% endif %}
-    </div>
-
-
-    <div class="card border-dark mb-3">
-        <div class="card-header">Add custom measurement</div>
-        <div class="card-body">
-            {% if request.user.is_authenticated %}
-                <h4 class="card-title">This form allow to add custom measurement.</h4>
-                <p class="card-text">Set name, type and period of time. Measurement can be removed only by the user who added it.</p>
-                <form method="get" action="add_complex_measurement">
-                  <fieldset>
-                    <div class="form-group">
-                      <legend>Name</legend>
-                      <input type="text" class="form-control" name="custom_measurement_name" placeholder="Name">
-                    </div>
-
-                    <div class="form-group">
-                      <legend>Metric type</legend>
-                        <input type="radio" name="metric_type" value="RAM" checked> RAM <br>
-                        <input type="radio" name="metric_type" value="CPU"> CPU <br>
-                        <input type="radio" name="metric_type" value="HDD"> HDD
-                    </div>
-
-
-                    <div class="form-group">
-                      <legend>Time period in seconds</legend>
-                      <input type="number" class="form-control" name="time_period" placeholder="e.g 300">
-                    </div>
-
-                        <button type="submit" class="btn btn-primary">ADD</button>
-                    </fieldset>
-                </form>
-            {% else %}
-            <h4 class="card-title">You must log in to add custom measurements.</h4>
-        {% endif %}
-        </div>
     </div>
 
     <div class="card border-dark mb-3">

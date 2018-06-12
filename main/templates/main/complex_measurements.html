@@ -2,14 +2,16 @@
 {% block content %}
 {% if request.user.is_authenticated %}
     {% if state %}
-        State of adding complex measurement: {{state}}.<br>
+    <h4>State of adding complex measurement: {{state}}.</h4><br>
     {% endif %}
 {% else %}
     You must login to see this page content.
 {% endif %}
-    <div class="jumbotron">
+    <div class="card border-dark mb-3">
 
-        <h1 class="display-3">Complex Measurements</h1>
+        <div class="card-header">Complex Measurements</div>
+        <div class="card-body">
+            <h4 class="card-title">Complex measurement can be added in hosts page. Please visit this page by clicking monitor details and picking right host. Good luck!</h4><br>
     {% if data %}
             <div id="hosts_table">
                 <table class="table table-hover">
@@ -46,5 +48,6 @@
     {% else %}
             <h4>You have no complex measurements.</h4>
     {% endif %}
+        </div>
     </div>
 {% endblock %}

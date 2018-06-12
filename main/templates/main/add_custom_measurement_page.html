@@ -1,0 +1,91 @@
+{% extends 'main/main.html' %}
+{% load staticfiles %}
+{% block scripts %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div class="card border-dark mb-3">
+        <div class="card-header">Host</div>
+            {% if host_data %}
+                <div class="card-body">
+                    <h4 class="card-title">Information about current host</h4>
+                        <div id="hosts_detail_table">
+                            <table id="host_detail_datatable" class="table table-striped table-bordered">
+                                <tbody>
+                                    <tr>
+                                      <th scope="row">ID</th>
+                                      <td>{{host_data.id}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">IP</th>
+                                      <td>{{host_data.ip}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Mac</th>
+                                      <td>{{host_data.mac}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">Name</th>
+                                      <td>{{host_data.name}}</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">CPU</th>
+                                      <td>{{host_data.cpu}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Memory</th>
+                                        <td>{{host_data.memory}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Platform</th>
+                                        <td>{{host_data.platform}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            {% else %}
+                <h4>There is no data.</h4>
+            {% endif %}
+    </div>
+
+    <div class="card border-dark mb-3">
+        <div class="card-header">Add custom measurement</div>
+        <div class="card-body">
+            {% if request.user.is_authenticated %}
+                <h4 class="card-title">This form allow to add custom measurement.</h4>
+                <p class="card-text">Set name, type and period of time. Measurement can be removed only by the user who added it.</p>
+                <form method="get" action="add_complex_measurement">
+                  <fieldset>
+                    <div class="form-group">
+                      <legend>Name</legend>
+                      <input type="text" class="form-control" name="custom_measurement_name" placeholder="Name">
+                    </div>
+
+                    <div class="form-group">
+                      <legend>Metric type</legend>
+                        <input type="radio" name="metric_type" value="RAM" checked> RAM <br>
+                        <input type="radio" name="metric_type" value="CPU"> CPU <br>
+                        <input type="radio" name="metric_type" value="HDD"> HDD
+                    </div>
+
+
+                    <div class="form-group">
+                      <legend>Time period in seconds</legend>
+                      <input type="number" class="form-control" name="time_period" placeholder="e.g 300">
+                    </div>
+
+                        <button type="submit" class="btn btn-primary">ADD</button>
+                    </fieldset>
+                </form>
+            {% else %}
+            <h4 class="card-title">You must log in to add custom measurements.</h4>
+        {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+

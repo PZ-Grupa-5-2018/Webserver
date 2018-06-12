@@ -409,6 +409,18 @@ def search_host(request):
         return render(request, 'main/search_host.html', context)
 
 
+def add_custom_measurement_page_view(request, monitor_id, host_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "hosts/" + str(host_id) + "/"
+    response = requests.get(url)
+    host_data = response.json()
+
+    context = {
+        'host_data': host_data,
+    }
+    return render(request, 'main/add_custom_measurement_page.html', context)
+
+
 class addComplexMeasurement(LoginRequiredMixin, FormView):
 
     def get(self, request, monitor_id, host_id):
@@ -418,24 +430,11 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
         metric_type = request.GET.get('metric_type', 'off')
         time_period = request.GET.get('time_period', 'off')
 
-
-        url = str(monitor_url) + "hosts/" + str(host_id)+ "/metrics/"
+        url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/"
         headers = {'Content-type': 'application/json'}
 
         data = {}
-
-        get_response = requests.get(url)
-        metrics_data = get_response.json()
-
-        metric_id = 0
-        for metric in metrics_data:
-            if metric["type"] == metric_type:
-                metric_id = metric["id"]
-                break
-
-        #print("custom_measurement_name: "+custom_measurement_name+" metric_type: "+metric_type+" time_period: "+time_period+" metric_id: "+str(metric_id))
-
-        data['metric_id'] = str(metric_id)
+        data['metric_id'] = str(metric_type)
         data['type'] = str("mean")
         data['period_seconds'] = str(time_period)
 
@@ -443,31 +442,37 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
         json_data = json.loads(json_data)
 
         response = requests.post(url, data=json.dumps(json_data), headers=headers)
-        if response.ok:
-            cs = CustomMeasurement(
-                owner=request.user,
-                name=str(custom_measurement_name),
-                url=str(monitor_url),
-                metric_type=str(metric_type),
-                host_id=host_id,
-                monitor_id=monitor_id,
-                metric_id=response.json()['id'],
-                period=time_period
-            )
-            cs.save()
-            if request.user.is_authenticated:
-                all_custom_measurements = CustomMeasurement.objects.order_by('-id')
-                user_measurements = []
-                for obiekt in all_custom_measurements:
-                    if obiekt.owner == request.user:
-                        user_measurements.append(obiekt)
-                context = {
-                    'data': user_measurements,
-                    'state': "successful"
-                }
-        else:
-            context = {
-                "state": "unsuccessful"
-            }
+        response_json = response.json()
 
+        #sprawdzamy czy odebrany json jest taki sam jak wyslany (bez unikatowego id)
+        if str(response_json['type']) == data['type'] and str(response_json['metric_id']) == data['metric_id'] and str(response_json['period_seconds']) == data['period_seconds']:
+            # sprawdzamy czy odebrany unikatowy id jest w bazie, jezeli nie to dodajemy rekord
+            if not CustomMeasurement.objects.filter(metric_id=response_json['id']).exists():
+                cs = CustomMeasurement(
+                    owner=request.user,
+                    name=str(custom_measurement_name),
+                    url=str(monitor_url),
+                    metric_type=str(metric_type),
+                    host_id=host_id,
+                    monitor_id=monitor_id,
+                    metric_id=response_json['id'],
+                    period=time_period
+                )
+                cs.save()
+                state = 'successful'
+            else:
+                state = 'unsuccessful'
+        else:
+            state = 'unsuccessful'
+
+        if request.user.is_authenticated:
+            all_custom_measurements = CustomMeasurement.objects.order_by('-id')
+            user_measurements = []
+            for obiekt in all_custom_measurements:
+                if obiekt.owner == request.user:
+                    user_measurements.append(obiekt)
+        context = {
+            'data': user_measurements,
+            "state": state
+        }
         return render(request, 'main/complex_measurements.html', context)
