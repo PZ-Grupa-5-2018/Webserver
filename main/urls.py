@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^monitors/(?P<monitor_id>[0-9]+)/get_last_measurements', views.getLastMeasurementsView),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/check_active_sensors', views.checkActiveSensors),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/(?P<host_id>[0-9]+)/$', views.hosts_detail),
+    url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/(?P<host_id>[0-9]+)/historicalMeasurements/$', views.historical_measurements),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/(?P<host_id>[0-9]+)/refresh_chart_measurements',
         views.refreshChartMeasurments),
     url(r'^monitors/(?P<monitor_id>[0-9]+)/hosts/(?P<host_id>[0-9]+)/metrics/(?P<metric_id>[0-9]+)/$',

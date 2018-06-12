@@ -7,9 +7,12 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView
 import requests
 
+from rest_framework import status
+from rest_framework.response import Response
 from main.forms import LoginForm, RegisterUserForm
 from .models import Monitor, CustomMeasurement
 from .utils import getMonitorDataFromUrl
@@ -222,6 +225,16 @@ def monitors_detail(request, monitor_id):
     }
     return render(request, 'main/monitors_detail.html', context)
 
+@csrf_exempt
+def historical_measurements(request,monitor_id,host_id):
+    if request.is_ajax():
+        monitor_url = Monitor.objects.get(id=monitor_id)
+        url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/";
+        data = json.loads(request.body.decode('utf-8'))
+        print(data)
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    else:
+        return Response({'please move along': 'no ajax request'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def refreshChartMeasurments(request, monitor_id, host_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
@@ -234,12 +247,13 @@ def refreshChartMeasurments(request, monitor_id, host_id):
         url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/" + str(metric["id"]) + "/measurements"
         response = requests.get(url)
         measurements_data = response.json()
-        measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
+        #measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
         values = []
         for single_measurment in measurements_data:
-            values.append({'x': time.mktime(
-                datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple()),
-                'y': single_measurment["value"]})
+            if not single_measurment == "detail":
+                values.append({'x': time.mktime(
+                    datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple()),
+                    'y': single_measurment["value"]})
         data_chart.append(dict(key=metric["type"], values=values))
 
     parsed = json.loads(json.dumps(data_chart))
@@ -304,9 +318,10 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
     measurements_data = response.json ()
     values = []
     for single_measurment in measurements_data:
-        values.append({'x': time.mktime(
-            datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()),
-            'y': single_measurment["value"]})
+        if not single_measurment == "detail":
+            values.append({'x': time.mktime(
+                datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()),
+                'y': single_measurment["value"]})
     context = {
         'metric_data': metric_data,
         'measurements_data': measurements_data,

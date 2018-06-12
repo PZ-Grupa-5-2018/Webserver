@@ -1,12 +1,12 @@
 var drawSingleChart =  function () {
     nv.addGraph(function() {
       var chart = nv.models.lineChart()
-          .useInteractiveGuideline(true);
+          .useInteractiveGuideline(false);
 
         chart.xAxis
             .axisLabel('Time')
             .tickFormat(function(d) {
-                 return d3.time.format('%x ')(new Date(d*1000))
+                 return d3.time.format('%X ')(new Date(d*1000))
             });
         ;
 
@@ -24,6 +24,6 @@ var drawSingleChart =  function () {
 });
 };
 
-window.onload = function() {
+$(function() {
     drawSingleChart();
-}
+});

@@ -4,7 +4,7 @@ var drawChart =  function (dataChart) {
     nv.addGraph(function() {
         d3.selectAll('.nvtooltip').remove();
       var chart = nv.models.lineChart()
-          .useInteractiveGuideline(true)
+          .useInteractiveGuideline(false)
       ;
         chart.xAxis
             .axisLabel('Time')
@@ -58,3 +58,5 @@ function stopRefresh(){
     document.getElementById("startRefresh").disabled = false;
     document.getElementById("stopRefresh").disabled = true;
 }
+
+
