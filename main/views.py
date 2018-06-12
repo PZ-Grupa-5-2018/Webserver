@@ -448,11 +448,11 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
                         user_measurements.append(obiekt)
                 context = {
                     'data': user_measurements,
-                    'state': "successfull"
+                    'state': "successful"
                 }
         else:
             context = {
-                "state": "unsuccessfull"
+                "state": "unsuccessful"
             }
 
         return render(request, 'main/complex_measurements.html', context)
