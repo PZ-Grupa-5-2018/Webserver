@@ -11,6 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView
 import requests
 
+from rest_framework import status
+from rest_framework.response import Response
 from main.forms import LoginForm, RegisterUserForm
 from .models import Monitor, CustomMeasurement
 from .utils import getMonitorDataFromUrl
@@ -21,7 +23,6 @@ import json
 import datetime
 import time
 from django.contrib.auth.models import User
-
 
 class LoginRequiredMixin(object):
     """
@@ -71,18 +72,6 @@ class LoginPageView(FormView):
         return render(request, self.template_name, {'form': form})
 
 
-@csrf_exempt
-def historical_measurements(request):
-    # TO tez trzeba ladnie sprawdzi
-    # if request.is_ajax():
-    #     ...
-    # else:
-    #     ...
-    data = json.loads(request.body)
-    print(data)
-    return HttpResponse(json.dumps(data), content_type="application/json")
-
-
 class LogoutPageView(LoginRequiredMixin, FormView):
     """
    Widok służący do wylogowania użytkownika
@@ -121,9 +110,6 @@ class ComplexMeasurementsView(LoginRequiredMixin, FormView):
             context = {
                 'data': user_measurements,
             }
-            if request.method == 'POST':
-                de = request.GET['delete_value']
-                print(de)
         return render(request, self.template_name, context)
 
 
@@ -191,7 +177,7 @@ def getLastMeasurementsView(request, monitor_id):
 
 
 def getLastMeasurementsFromMonitorListView(request, monitor_list):
-    splitted_monitor_list = monitor_list.split('_')[1:-1]
+    splitted_monitor_list=monitor_list.split('_')[1:-1]
     last_measurements = getLastMeasurementsFromMonitorList(splitted_monitor_list, 20)
     parsed = json.loads(json.dumps(last_measurements))
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
@@ -236,6 +222,15 @@ def monitors_detail(request, monitor_id):
     }
     return render(request, 'main/monitors_detail.html', context)
 
+@csrf_exempt
+def historical_measurements(request,monitor_id,host_id):
+    if request.is_ajax():
+        monitor_url = Monitor.objects.get(id=monitor_id)
+        url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/";
+        data = json.loads(request.body.decode('utf-8'))
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    else:
+        return Response({'please move along': 'no ajax request'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def refreshChartMeasurments(request, monitor_id, host_id):
     monitor_url = Monitor.objects.get(id=monitor_id)
@@ -248,7 +243,7 @@ def refreshChartMeasurments(request, monitor_id, host_id):
         url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/" + str(metric["id"]) + "/measurements"
         response = requests.get(url)
         measurements_data = response.json()
-        # measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
+        #measurements_data = sorted(measurements_data, key=lambda k: k['timestamp'])
         values = []
         for single_measurment in measurements_data:
             if not single_measurment == "detail":
@@ -316,12 +311,12 @@ def metrics_detail(request, monitor_id, host_id, metric_id):
     url = url + "/measurements/"
     url = url + "?count=100"
     response = requests.get(url)
-    measurements_data = response.json()
+    measurements_data = response.json ()
     values = []
     for single_measurment in measurements_data:
         if not single_measurment == "detail":
             values.append({'x': time.mktime(
-                datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple()),
+                datetime.datetime.strptime(single_measurment["timestamp"], "%Y-%m-%dT%H:%M:%SZ").timetuple ()),
                 'y': single_measurment["value"]})
     context = {
         'metric_data': metric_data,
@@ -395,13 +390,13 @@ def search_host(request):
                 j['monitor_url'] = i.url
 
                 if cpu == 'on':
-                    if 1 in all_metrics:
+                    if 'CPU' in all_metrics:
                         all_metric_data.append(j)
                 elif ram == 'on':
-                    if 2 in all_metrics:
+                    if 'RAM' in all_metrics:
                         all_metric_data.append(j)
                 elif hdd == 'on':
-                    if 3 in all_metrics:
+                    if 'HDD' in all_metrics:
                         all_metric_data.append(j)
 
         context = {
@@ -410,7 +405,20 @@ def search_host(request):
         return render(request, 'main/search_host.html', context)
 
 
+def add_custom_measurement_page_view(request, monitor_id, host_id):
+    monitor_url = Monitor.objects.get(id=monitor_id)
+    url = str(monitor_url) + "hosts/" + str(host_id) + "/"
+    response = requests.get(url)
+    host_data = response.json()
+
+    context = {
+        'host_data': host_data,
+    }
+    return render(request, 'main/add_custom_measurement_page.html', context)
+
+
 class addComplexMeasurement(LoginRequiredMixin, FormView):
+
     def get(self, request, monitor_id, host_id):
         monitor_url = Monitor.objects.get(id=monitor_id)
 
@@ -422,19 +430,7 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
         headers = {'Content-type': 'application/json'}
 
         data = {}
-
-        get_response = requests.get(url)
-        metrics_data = get_response.json()
-
-        metric_id = 0
-        for metric in metrics_data:
-            if metric["type"] == metric_type:
-                metric_id = metric["id"]
-                break
-
-        # print("custom_measurement_name: "+custom_measurement_name+" metric_type: "+metric_type+" time_period: "+time_period+" metric_id: "+str(metric_id))
-
-        data['metric_id'] = str(metric_id)
+        data['metric_id'] = str(metric_type)
         data['type'] = str("mean")
         data['period_seconds'] = str(time_period)
 
@@ -442,42 +438,57 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
         json_data = json.loads(json_data)
 
         response = requests.post(url, data=json.dumps(json_data), headers=headers)
+        response_json = response.json()
 
-        if response.ok:
-            # tutaj musimy znalesc id metryki (mozna przeniesc do widoku tworzacego liste)... po jej dodaniu bo jest unikatowe i nie znamy go wczesniej
-            # url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/"
-            # get_response = requests.get(url)
-            # metrics_data = get_response.json()
-            # target_metric_id = 0
-            # for metric in metrics_data:
-            #     if metric["type"] == metric_type and metric["metric_id"] == metric_id and metric["period_seconds"] == time_period :
-            #         target_metric_id = metric["id"]
-            #         break
-
-            cs = CustomMeasurement(
-                owner=request.user,
-                name=str(custom_measurement_name),
-                url=str(monitor_url),
-                metric_type=str(metric_type),
-                host_id=host_id,
-                monitor_id=monitor_id,
-                metric_id=metric_id,
-                period=time_period
-            )
-            cs.save()
-            if request.user.is_authenticated:
-                all_custom_measurements = CustomMeasurement.objects.order_by('-id')
-                user_measurements = []
-                for obiekt in all_custom_measurements:
-                    if obiekt.owner == request.user:
-                        user_measurements.append(obiekt)
-                context = {
-                    'data': user_measurements,
-                    'state': "successfull"
-                }
+        #sprawdzamy czy odebrany json jest taki sam jak wyslany (bez unikatowego id)
+        if str(response_json['type']) == data['type'] and str(response_json['metric_id']) == data['metric_id'] and str(response_json['period_seconds']) == data['period_seconds']:
+            # sprawdzamy czy odebrany unikatowy id jest w bazie, jezeli nie to dodajemy rekord
+            if not CustomMeasurement.objects.filter(metric_id=response_json['id']).exists():
+                cs = CustomMeasurement(
+                    owner=request.user,
+                    name=str(custom_measurement_name),
+                    url=str(monitor_url),
+                    metric_type=str(metric_type),
+                    host_id=host_id,
+                    monitor_id=monitor_id,
+                    metric_id=response_json['id'],
+                    period=time_period
+                )
+                cs.save()
+                state = 'successful'
+            else:
+                state = 'unsuccessful'
         else:
-            context = {
-                "state": "unsuccessfull"
-            }
+            state = 'unsuccessful'
 
+        if request.user.is_authenticated:
+            all_custom_measurements = CustomMeasurement.objects.order_by('-id')
+            user_measurements = []
+            for obiekt in all_custom_measurements:
+                if obiekt.owner == request.user:
+                    user_measurements.append(obiekt)
+        context = {
+            'data': user_measurements,
+            "state": state
+        }
         return render(request, 'main/complex_measurements.html', context)
+
+
+class ComplexMeasurementsDelete(LoginRequiredMixin, FormView):
+    """
+   Widok służący do kasowania custom measurementów
+   Dostęp do niego ma jedynie użytkownik zalogowany
+   """
+
+
+    def get(self, request, custom_id, **kwargs):
+        if request.user.is_authenticated:
+            cs_user = CustomMeasurement.objects.get(id=custom_id).owner
+            cs = CustomMeasurement.objects.get(id=custom_id)
+            if request.user == cs_user:
+                delete_url = cs.url + "hosts/" + str(cs.host_id) + "/metrics/" + str(cs.metric_id)
+                #print(delete_url)
+                requests.delete(delete_url)
+                cs.delete()
+
+            return HttpResponseRedirect(reverse('complex_measurements'))

@@ -1,14 +1,14 @@
-var drawSingleChart = function () {
-    nv.addGraph(function () {
-        var chart = nv.models.lineChart()
-            .useInteractiveGuideline(false);
+var drawSingleChart =  function () {
+    nv.addGraph(function() {
+      var chart = nv.models.lineChart()
+          .useInteractiveGuideline(false);
 
         chart.xAxis
             .axisLabel('Time')
-            .tickFormat(function (d) {
-                return d3.time.format('%x ')(new Date(d * 1000))
+            .tickFormat(function(d) {
+                 return d3.time.format('%X ')(new Date(d*1000))
             });
-
+        ;
 
         chart.yAxis
             .axisLabel('Usage')
@@ -20,10 +20,10 @@ var drawSingleChart = function () {
             .transition().duration(1200)
             .call(chart);
 
-        return chart;
-    });
+      return chart;
+});
 };
 
-window.onload = function () {
+$(function() {
     drawSingleChart();
-};
+});

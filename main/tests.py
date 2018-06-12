@@ -1,9 +1,12 @@
+from unittest import skip
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils import timezone
 
 from main.forms import LoginForm, RegisterUserForm
-from main.models import Monitor, validate_url
+from main.models import Monitor, validate_url, CustomMeasurement
 from django.test import Client
 
 
@@ -129,6 +132,10 @@ class ComplexMeasurements(TestCase):
     @classmethod
     def setUpTestData(cls):
         User.objects.create(username='admin', email='admin@admin.com', password='admin12345', is_staff=True)
+        CustomMeasurement.objects.create(owner=User.objects.get(username="admin"), name="TEST", url="url", host_id=1,
+                                         monitor_id=1, metric_id=1, period=1, created=timezone.now(),
+                                         metric_type="mean")
+        Monitor.objects.create(name="Monitor II", url="https://pz-monitor-2.herokuapp.com")
 
     def test_measurementComplex_page_without_login(self):
         c = Client()
@@ -140,4 +147,100 @@ class ComplexMeasurements(TestCase):
         c = Client()
         c.force_login(User.objects.get(username="admin"))
         response = c.get('/complexMeasurements/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_custom_measurement_page_view(self):
+        c = Client()
+        response = c.get("/monitors/1/hosts/1/add_custom_measurement_page/")
+        self.assertEqual(response.status_code, 200)
+
+    @skip("Don't want to test")
+    def test_add_complex_measurement(self):
+        c = Client()
+        c.force_login(User.objects.get(username="admin"))
+        response = c.get("/monitors/1/hosts/1/add_custom_measurement_page/add_complex_measurement/",
+                         {"custom_measurement_nam": "", "metric_type": "", "time_period": "", "type": "mean"})
+        self.assertEqual(response.status_code, 200)
+
+    @skip("Don't want to test")
+    def test_ComplexMeasurementsDelete(self):
+        c = Client()
+        c.force_login(User.objects.get(username="admin"))
+        response = c.get("/customDelete/1")
+        self.assertEqual(response.status_code, 200)
+
+
+class MonitorTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        User.objects.create(username='admin', email='admin@admin.com', password='admin12345', is_staff=True)
+        Monitor.objects.create(name="Monitor II", url="https://pz-monitor-2.herokuapp.com")
+
+    def test_getMonitorHosts(self):
+        c = Client()
+        response = c.get("/monitors/1/download_monitor_data/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_downloadMonitorDetails(self):
+        c = Client()
+        response = c.get("/monitors/1/get_monitor_hosts/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_getLastMeasurementsView(self):
+        c = Client()
+        response = c.get("/monitors/1/get_last_measurements")
+        self.assertEqual(response.status_code, 200)
+
+    def test_getLastMeasurementsFromMonitorListView(self):
+        c = Client()
+        response = c.get("/monitors/_1_/get_last_measurements_from_monitor_list/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_monitors(self):
+        c = Client()
+        response = c.get("/monitors/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_monitors_detail(self):
+        c = Client()
+        response = c.get("/monitors/1/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_historical_measurements(self):
+        pass
+
+    def test_refreshChartMeasurments(self):
+        c = Client()
+        response = c.get("/monitors/1/hosts/1/refresh_chart_measurements/")
+        self.assertEqual(response.status_code, 200)
+
+    @skip("Don't want to test")
+    def test_checkActiveSensors(self):
+        c = Client()
+        response = c.get("/monitors/1/check_active_sensors/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_hosts_detail(self):
+        c = Client()
+        response = c.get("/monitors/1/hosts/1/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_metrics_detail(self):
+        c = Client()
+        response = c.get("/monitors/1/hosts/1/metrics/1/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_search(self):
+        c = Client()
+        response = c.get("/search/")
+        self.assertEqual(response.status_code, 200)
+
+    def test_search_host(self):
+        c = Client()
+        response = c.get("/search/search_host/", {"search_generic": "", "search_type": "generic"})
+        self.assertEqual(response.status_code, 200)
+        response = c.get("/search/search_host/",
+                         {"search_generic": "advanced", "search_type": "", "search_name": "", "search_ip": "",
+                          "search_mac": "",
+                          "CPU": "on", "RAM": "on", "HDD": "on"})
         self.assertEqual(response.status_code, 200)

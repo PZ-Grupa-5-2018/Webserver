@@ -1,15 +1,15 @@
 var interval_refresh_last_measurements = window.setInterval('refresh_chart_measruments()', 5000); // 10 seconds
 
-var drawChart = function (dataChart) {
-    nv.addGraph(function () {
+var drawChart =  function (dataChart) {
+    nv.addGraph(function() {
         d3.selectAll('.nvtooltip').remove();
-        var chart = nv.models.lineChart()
-            .useInteractiveGuideline(false)
-        ;
+      var chart = nv.models.lineChart()
+          .useInteractiveGuideline(false)
+      ;
         chart.xAxis
             .axisLabel('Time')
-            .tickFormat(function (d) {
-                return d3.time.format('%X')(new Date(d * 1000))
+            .tickFormat(function(d) {
+                 return d3.time.format('%X')(new Date(d*1000))
             });
 
         chart.yAxis
@@ -22,25 +22,25 @@ var drawChart = function (dataChart) {
             .transition().duration(1200)
             .call(chart);
 
-        return chart;
-    });
+      return chart;
+});
 };
 
 var clearChart = function () {
     var svg = d3.select("chart svg");
     svg.selectAll("*").remove();
-};
+}
 
-var refresh_chart_measruments = function () {
+var refresh_chart_measruments = function() {
     $.ajax({
         type: "GET",
         url: "refresh_chart_measurements/",
-        success: function (chart_data_measurments) {
+        success: function( chart_data_measurments ) {
             clearChart();
             drawChart(chart_data_measurments);
         },
-        error: function (ts, resp, error) {
-            console.log("not work - response: " + resp + " - error: " + error);
+        error: function(ts,resp,error) {
+            console.log("not work - response: "+resp+" - error: "+error);
         }
     });
 };
@@ -53,45 +53,10 @@ function startRefresh() {
     document.getElementById("startRefresh").disabled = true;
     document.getElementById("stopRefresh").disabled = false;
 }
-
-function stopRefresh() {
+function stopRefresh(){
     clearInterval(interval_refresh_last_measurements);
     document.getElementById("startRefresh").disabled = false;
     document.getElementById("stopRefresh").disabled = true;
 }
 
-function draw_historical_chart() {
-    var chkArray = [];
-
-    $(".checkbox:checked").each(function () {
-        chkArray.push($(this).val());
-    });
-
-    var dateTime = $('.chosenDatetime').val();
-
-    if (chkArray.length < 1) {
-        alert("Please at least check one of the metric type");
-    }
-    else {
-        var data = {
-            'timestamp': dateTime,
-            'metric_ids': chkArray
-        };
-        $.ajax({
-            type: "POST",
-            url: "/historicalMeasurements/",
-            data: JSON.stringify(data),
-            contentType: 'application/json',
-            dataType: 'json',
-            success: (function (data) {
-                console.log(data)
-            })
-        });
-    }
-}
-
-window.onload = function () {
-    var isoStr = new Date().toISOString();
-    $('#chosenDatetime').val(isoStr.substring(0, isoStr.length - 1));
-};
 
