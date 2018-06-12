@@ -1,6 +1,6 @@
 from django.urls import path
 
-from main.views import LoginPageView, LogoutPageView, ComplexMeasurementsView, RegisterUserView, HomePageView
+from main.views import LoginPageView, LogoutPageView, ComplexMeasurementsView, RegisterUserView, HomePageView, addComplexMeasurement, ComplexMeasurementsDelete
 from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.conf.urls import url

@@ -487,7 +487,8 @@ class ComplexMeasurementsDelete(LoginRequiredMixin, FormView):
             cs_user = CustomMeasurement.objects.get(id=custom_id).owner
             cs = CustomMeasurement.objects.get(id=custom_id)
             if request.user == cs_user:
-                delete_url = cs.url + "/hosts" + str(cs.host_id) + "/metrics/" + str(cs.metric_id)
+                delete_url = cs.url + "hosts/" + str(cs.host_id) + "/metrics/" + str(cs.metric_id)
+                print(delete_url)
                 requests.delete(delete_url)
                 cs.delete()
 
