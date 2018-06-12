@@ -271,15 +271,16 @@ def checkActiveSensors(request, monitor_id):
             metric_type = metric["type"]
             metric_id = metric["id"]
             for measurement in metric["measurements"]:
-                single_measurement = {}
-                single_measurement["host_ip"] = host_ip
-                single_measurement["host_name"] = host_name
-                single_measurement["host_id"] = host_id
-                single_measurement["metric_type"] = metric_type
-                single_measurement["metric_id"] = metric_id
-                single_measurement["measurement_value"] = measurement["value"]
-                single_measurement["measurement_timestamp"] = measurement["timestamp"]
-                sensors_measurements.append(single_measurement)
+                if not "detail" in measurement:
+                    single_measurement = {}
+                    single_measurement["host_ip"] = host_ip
+                    single_measurement["host_name"] = host_name
+                    single_measurement["host_id"] = host_id
+                    single_measurement["metric_type"] = metric_type
+                    single_measurement["metric_id"] = metric_id
+                    single_measurement["measurement_value"] = measurement["value"]
+                    single_measurement["measurement_timestamp"] = measurement["timestamp"]
+                    sensors_measurements.append(single_measurement)
 
     parsed = json.loads(json.dumps(sensors_measurements))
     response = HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
