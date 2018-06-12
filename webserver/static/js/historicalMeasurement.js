@@ -53,11 +53,13 @@ function draw_historical_chart() {
             success: (function (data) {
                 $("#historical_chart").show();
                 historical_chart(data);
+                createCSVData(data);
             })
         });
     }
 }
 
+var csv;
 
 $(function() {
     $("#historical_chart").hide();
@@ -65,3 +67,36 @@ $(function() {
     $('.chosen_datetime').val(isoStr.substring(0,isoStr.length-1));
 });
 
+function createCSVData(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    csv = '';
+    for (var i = 0; i < array.length; i++) {
+        var output = '';
+        for (var index in array[i]) {
+            if(index == 'key')
+                output += 'Timestamp ,' + array[i][index] + '\n';
+            else
+                for(measurment in array[i][index])
+                    output += array[i][index][measurment].x +  ',' + array[i][index][measurment].y + '\n';
+         }
+        csv += output + '\r\n';
+    }
+}
+function downloadCSV(args) {
+        var data, filename, link;
+        if (csv == null){
+           alert("The data has not been selected");
+           return;
+        }
+        filename = args.filename || 'export.csv';
+
+        if (!csv.match(/^data:text\/csv/i)) {
+            csv = 'data:text/csv;charset=utf-8,' + csv;
+        }
+        data = encodeURI(csv);
+
+        link = document.createElement('a');
+        link.setAttribute('href', data);
+        link.setAttribute('download', filename);
+        link.click();
+}
