@@ -226,10 +226,31 @@ def monitors_detail(request, monitor_id):
 def historical_measurements(request,monitor_id,host_id):
     if request.is_ajax():
         monitor_url = Monitor.objects.get(id=monitor_id)
-        url = str(monitor_url) + "hosts/" + str(host_id) + "/metrics/";
-        data = json.loads(request.body.decode('utf-8'))
-        print(data)
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        data = json.loads (request.body.decode ('utf-8'))
+
+        data_chart = []
+        for metric_id in data['metric_ids']:
+
+            metric_type_url = str (monitor_url) + "hosts/" + str (host_id) + "/metrics/" + str (metric_id)
+            response = requests.get (metric_type_url)
+            metric_type = response.json ()
+
+            url = str (monitor_url) + "hosts/" + str (host_id) + "/metrics/" + str(metric_id) + "/measurements?since=" + str(data['timestamp'])
+            response = requests.get (url)
+            measurements_data = response.json ()
+
+            if isinstance(measurements_data,list):
+                values = []
+                for single_measurment in measurements_data:
+                    if not single_measurment == "detail":
+                        values.append ({'x': time.mktime (
+                            datetime.datetime.strptime (single_measurment["timestamp"],
+                                                        "%Y-%m-%dT%H:%M:%SZ").timetuple ()),
+                            'y': single_measurment["value"]})
+                data_chart.append (dict (key=metric_type["type"], values=values))
+
+        parsed = json.loads (json.dumps (data_chart))
+        return HttpResponse(json.dumps(parsed, indent=4, sort_keys=True), content_type='application/json')
     else:
         return Response({'please move along': 'no ajax request'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
