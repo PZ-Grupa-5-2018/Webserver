@@ -370,19 +370,19 @@ def search_host(request):
 
                 all_metrics = set()
                 for metryka in host:
-                    all_metrics.add(metryka['metric_id'])
+                    all_metrics.add(metryka['type'])
 
                 j['monitor_id'] = i.id
                 j['monitor_url'] = i.url
 
                 if cpu == 'on':
-                    if 1 in all_metrics:
+                    if 'CPU' in all_metrics:
                         all_metric_data.append(j)
                 elif ram == 'on':
-                    if 2 in all_metrics:
+                    if 'RAM' in all_metrics:
                         all_metric_data.append(j)
                 elif hdd == 'on':
-                    if 3 in all_metrics:
+                    if 'HDD' in all_metrics:
                         all_metric_data.append(j)
 
         context = {
