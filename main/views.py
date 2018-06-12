@@ -110,9 +110,6 @@ class ComplexMeasurementsView(LoginRequiredMixin, FormView):
             context = {
                 'data': user_measurements,
             }
-            if request.method == 'POST':
-                de = request.GET['delete_value']
-                print(de)
         return render(request, self.template_name, context)
 
 
@@ -394,13 +391,13 @@ def search_host(request):
                 j['monitor_url'] = i.url
 
                 if cpu == 'on':
-                    if 1 in all_metrics:
+                    if 'CPU' in all_metrics:
                         all_metric_data.append(j)
                 elif ram == 'on':
-                    if 2 in all_metrics:
+                    if 'RAM' in all_metrics:
                         all_metric_data.append(j)
                 elif hdd == 'on':
-                    if 3 in all_metrics:
+                    if 'HDD' in all_metrics:
                         all_metric_data.append(j)
 
         context = {
@@ -476,3 +473,22 @@ class addComplexMeasurement(LoginRequiredMixin, FormView):
             "state": state
         }
         return render(request, 'main/complex_measurements.html', context)
+
+
+class ComplexMeasurementsDelete(LoginRequiredMixin, FormView):
+    """
+   Widok służący do kasowania custom measurementów
+   Dostęp do niego ma jedynie użytkownik zalogowany
+   """
+
+
+    def get(self, request, custom_id, **kwargs):
+        if request.user.is_authenticated:
+            cs_user = CustomMeasurement.objects.get(id=custom_id).owner
+            cs = CustomMeasurement.objects.get(id=custom_id)
+            if request.user == cs_user:
+                delete_url = cs.url + "/hosts" + str(cs.host_id) + "/metrics/" + str(cs.metric_id)
+                requests.delete(delete_url)
+                cs.delete()
+
+            return HttpResponseRedirect(reverse('complex_measurements'))

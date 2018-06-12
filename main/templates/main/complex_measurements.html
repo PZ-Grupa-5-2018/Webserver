@@ -4,6 +4,7 @@
     {% if state %}
     <h4>State of adding complex measurement: {{state}}.</h4><br>
     {% endif %}
+
 {% else %}
     You must login to see this page content.
 {% endif %}
@@ -34,11 +35,9 @@
                       <td>{{ custom.host_id }}</td>
                       <td>{{ custom.metric_type }}</td>
                       <td>{{ custom.period }}</td>
-                      <td> <a href="/monitors/{{ custom.monitor_id }}/hosts/{{ custom.host_id }}/metrics/{{ custom.metric_id }}"> Detail </a></td>
-                        <form action="" method="post">
-                            <input type="text" hidden name="delete_value" value="{{ custom.id }}"/>
-                            <td> <a href="/complexMeasurements" name="delete{{ custom.id }}"> Delete </a></td>
-                        </form>
+                      <td> <a href="/monitors/{{ custom.monitor_id }}/hosts/{{ custom.host_id }}/metrics"> Detail </a></td>
+                      <td> <a href="/customDelete/{{ custom.id }}" name="delete"> Delete </a></td>
+
                     </tr>
                     {% endfor %}
 
