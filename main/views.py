@@ -407,7 +407,7 @@ def search_host(request):
 
                 all_metrics = set()
                 for metryka in host:
-                    all_metrics.add(metryka['metric_id'])
+                    all_metrics.add(metryka['type'])
 
                 j['monitor_id'] = i.id
                 j['monitor_url'] = i.url

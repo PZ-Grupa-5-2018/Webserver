@@ -4,7 +4,7 @@
     <div class="col-md-auto">
         <div class="page-header">
             <h2>Webserver
-                <small>Logowanie</small>
+                <small>Login</small>
             </h2>
         </div>
 
@@ -20,9 +20,9 @@
 
         <form action="" method="post">{% csrf_token %}
             {{ form | crispy }}
-            <p class="text-muted">(*) Wymagane </p>
+            <p class="text-muted">(*) Required </p>
             <input type="submit" value="Zaloguj!" class="btn btn-primary"/>
-            <a href="{% url 'register' %}" class="top-menu">Nie masz konta ?</a>
+            <a href="{% url 'register' %}" class="top-menu"> You do not have an account ?</a>
             <input type="hidden" name="next" value="{{ request.GET.next }}"/>
         </form>
     </div>

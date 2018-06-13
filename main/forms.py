@@ -10,8 +10,8 @@ class LoginForm(forms.Form):
        username    Nazwa użytkownika
        password    Hasło użytkownika
    """
-    username = forms.CharField(label='Nazwa użytkownika')
-    password = forms.CharField(widget=forms.PasswordInput(), label='Hasło')
+    username = forms.CharField(label='User name')
+    password = forms.CharField(widget=forms.PasswordInput(), label='Password')
 
 
 class RegisterUserForm(forms.ModelForm):
@@ -22,9 +22,9 @@ class RegisterUserForm(forms.ModelForm):
        password            Hasło użytkownika
        password_confirm    Powtórzone hasło użytkownika
    """
-    password = forms.CharField(widget=forms.PasswordInput(), label='Hasło',
-                               help_text='Hasło powinno zawierać od 6 do 20 znaków.')
-    password_confirm = forms.CharField(widget=forms.PasswordInput(), label='Powtórz hasło')
+    password = forms.CharField(widget=forms.PasswordInput(), label='Password',
+                               help_text='Password must have from 6 to 20 characters.')
+    password_confirm = forms.CharField(widget=forms.PasswordInput(), label='Repeat password')
 
     class Meta:
         """
@@ -38,22 +38,22 @@ class RegisterUserForm(forms.ModelForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
         labels = {
-            'username': 'Nazwa użytkownika',
-            'first_name': 'Imię',
-            'last_name': 'Nazwisko',
+            'username': 'Username',
+            'first_name': 'First name',
+            'last_name': 'Last name',
             'email': 'Email',
         }
         help_texts = {
-            'username': 'Nazwa użytkownika powinna zawierać od 6 do 20 znaków.',
-            'email': 'Zalecany z domeny fis.agh.edu.pl.'
+            'username': 'Username must have from 6 to 20 characters.',
+            'email': 'Recommended from domain fis.agh.edu.pl.'
         }
         error_messages = {
             'username': {
-                'unique': 'Taki użytkownik już istnieje!',
-                'invalid': 'Niedozwolony znak. Spróbuj użyć innej nazwy!'
+                'unique': 'This user already exists!',
+                'invalid': 'Wrong sign. Try another name!'
             },
             'email': {
-                'invalid': 'Nieprawidłowy adres email!'
+                'invalid': 'Wrong email!'
             }
         }
 
@@ -76,7 +76,7 @@ class RegisterUserForm(forms.ModelForm):
        """
         username = self.cleaned_data['username'].strip()
         if len(username) < 4 or len(username) > 20:
-            raise forms.ValidationError('Nieprawidłowa liczba znaków!')
+            raise forms.ValidationError('Wrong characters number!')
         return username
 
     def clean_email(self):
@@ -86,7 +86,7 @@ class RegisterUserForm(forms.ModelForm):
        """
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError('Taki adres email jest już zarejestrowany!')
+            raise forms.ValidationError('This email is already registered!')
         return email
 
     def clean_password_confirm(self):
@@ -99,7 +99,7 @@ class RegisterUserForm(forms.ModelForm):
         password = cd['password']
         password_confirm = cd['password_confirm']
         if len(password) < 6 or len(password_confirm) > 20:
-            raise forms.ValidationError('Nieprawidłowa liczba znaków!')
+            raise forms.ValidationError('Invalid number of characters!')
         if password != password_confirm:
-            raise forms.ValidationError('Hasła nie pasują!')
+            raise forms.ValidationError('Passwords do not match!')
         return password_confirm
