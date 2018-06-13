@@ -44,7 +44,7 @@ class LoginRegisterLogoutViewTest(TestCase):
         c = Client()
         response = c.get('/login/')
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '<small>Logowanie</small>', status_code=200)
+        self.assertContains(response, '<small>Login</small>', status_code=200)
 
     def test_login_page_post_error(self):
         cd = {'username': 'admins', 'password': 'admin12345'}
