@@ -11,8 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView
 import requests
 
-from rest_framework import status
-from rest_framework.response import Response
 from main.forms import LoginForm, RegisterUserForm
 from .models import Monitor, CustomMeasurement
 from .utils import getMonitorDataFromUrl
