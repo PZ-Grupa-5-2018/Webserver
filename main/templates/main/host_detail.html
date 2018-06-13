@@ -83,7 +83,7 @@
 
 
     <div class="card border-dark mb-3">
-        <div class="card-header">Chart measurement</div>
+        <div class="card-header">Live chart measurement</div>
 
         <div id="button_start_stop_charts">
             <button id="startRefresh" class="btn btn-primary" onclick="startRefresh()" disabled> Start</button>
@@ -143,7 +143,10 @@
                     <button id="draw_historical_chart" class="btn btn-primary" onclick="draw_historical_chart()" >Draw</button>
                  </div>
             </div>
-            <div class="chart" id="historical_chart"><svg></svg></div>
+            <div class="chart" id="historical_chart">
+                <svg></svg>
+                <button id="download_csv" class="btn btn-primary" onclick='downloadCSV({ filename: "historical_data.csv" });'>Download CSV</button>
+            </div>
     </div>
 
 <script>
